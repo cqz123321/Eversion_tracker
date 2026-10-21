@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 
 from colon import point_at
+from flowfield import sample
 
 CMAP = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
 C_BND = (0, 255, 255)
@@ -79,6 +80,55 @@ def render_left(frame, h, tip_station, scale, editor=None, show_tracking=True, m
     return img
 
 
+FLOW_STEP = 24  # grid spacing of the flow arrows (px)
+
+
+def _arrows(img, pts, disp, unit, color, th):
+    """Arrows from pts along disp, `unit` px of motion drawn as one grid step; tiny motions are skipped."""
+    for (x, y), d in zip(pts, disp):
+        if np.hypot(*d) < 0.15 * unit:
+            continue
+        e = (x + d[0] / unit * FLOW_STEP, y + d[1] / unit * FLOW_STEP)
+        cv2.arrowedLine(img, (int(round(x)), int(round(y))), (int(round(e[0])), int(round(e[1]))),
+                        color, th, cv2.LINE_AA, tipLength=0.3)
+
+
+def _flow_image(img, f, frames):
+    """Colour = direction (hue wheel, top right), brightness = distance. The scale adapts to the 99th percentile
+    of the motion (at least 0.5 px, so a still scene stays dark instead of showing amplified noise)."""
+    mag, ang = cv2.cartToPolar(f[..., 0], f[..., 1])
+    # near-black areas have no texture: their flow is compression noise, so fade it out
+    mag = mag * np.clip((cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float32) - 20) / 30, 0, 1)
+    f = f * (mag / np.maximum(np.hypot(f[..., 0], f[..., 1]), 1e-6))[..., None]
+    unit = max(float(np.percentile(mag, 99)), 0.5)
+    hsv = np.zeros(img.shape, np.uint8)
+    hsv[..., 0] = (ang * 90 / np.pi).astype(np.uint8)
+    hsv[..., 1] = 255
+    hsv[..., 2] = np.clip(mag / unit * 255, 0, 255).astype(np.uint8)
+    out = cv2.addWeighted(img, 0.35, cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR), 0.9, 0)
+    s = FLOW_STEP
+    ys, xs = np.mgrid[s // 2:img.shape[0]:s, s // 2:img.shape[1]:s]
+    grid = np.stack([xs.ravel(), ys.ravel()], 1)
+    _arrows(out, grid, f[ys.ravel(), xs.ravel()], unit, (255, 255, 255), 1)
+    # colour wheel legend: the colour a pixel gets when it moves in that direction
+    r = 26
+    yy, xx = np.mgrid[-r:r + 1, -r:r + 1].astype(np.float32)
+    wm, wa = cv2.cartToPolar(xx, yy)
+    wheel = np.zeros((2 * r + 1, 2 * r + 1, 3), np.uint8)
+    wheel[..., 0] = (wa * 90 / np.pi).astype(np.uint8)
+    wheel[..., 1] = 255
+    wheel[..., 2] = np.clip(wm / r * 255, 0, 255).astype(np.uint8)
+    wheel = cv2.cvtColor(wheel, cv2.COLOR_HSV2BGR)
+    x0, y0 = out.shape[1] - 2 * r - 10, 10
+    roi = out[y0:y0 + 2 * r + 1, x0:x0 + 2 * r + 1]
+    inside = wm <= r
+    roi[inside] = wheel[inside]
+    text(out, "direction", (x0 - 6, y0 + 2 * r + 18), 0.4)
+    text(out, f"{frames} frames: full = {unit:.2f} px ({unit / max(frames, 1):.3f} px/frame)",
+         (8, out.shape[0] - 10), 0.42)
+    return out, unit
+
+
 def render_view(name, small, h, vis, thresh, tip_station, sig, view_max=40.0):
     img = small.copy()
     if name.startswith("Edge") and "edge" in vis:
@@ -94,18 +144,13 @@ def render_view(name, small, h, vis, thresh, tip_station, sig, view_max=40.0):
     elif name.startswith("Strap") and "strap" in vis:
         img[vis["strap"]] = (0.4 * img[vis["strap"]] + (0, 0, 153)).astype(np.uint8)
     elif name.startswith("Flow") and "flow" in vis:
-        f = vis["flow"]
-        mag, ang = cv2.cartToPolar(f[..., 0], f[..., 1])
-        hsv = np.zeros(img.shape, np.uint8)
-        hsv[..., 0] = (ang * 90 / np.pi).astype(np.uint8)
-        hsv[..., 1] = 255
-        hsv[..., 2] = np.clip(mag / 3.0 * 255, 0, 255).astype(np.uint8)
-        img = cv2.addWeighted(img, 0.4, cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR), 0.8, 0)
-        step = 24
-        for y in range(step // 2, img.shape[0], step):
-            for x in range(step // 2, img.shape[1], step):
-                dx, dy = f[y, x] * 5
-                cv2.arrowedLine(img, (x, y), (int(x + dx), int(y + dy)), (255, 255, 255), 1, cv2.LINE_AA, tipLength=0.3)
+        img, unit = _flow_image(img, vis["flow"], vis.get("flow_frames", 1))
+        if h is not None:  # what the flow does to the tracked points: displacement of boundary / centerline points
+            draw_tracking(img, h, tip_station, 1.0, 1)
+            for pts, step, col in ((h["bnd"], max(1, len(h["bnd"]) // 40), C_BND), (h["ctr"], 5, C_CTR)):
+                pts = pts[::step]
+                _arrows(img, pts, sample(vis["flow"], pts), unit, col, 2)
+            return img
     if h is None:
         return img
     if name.startswith("Signal") and sig is not None:

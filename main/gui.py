@@ -29,7 +29,7 @@ except ImportError:
 QShortcut = getattr(QtWidgets, "QShortcut", None) or QtGui.QShortcut
 
 from config import Params, PER_MODE, mode_key, mode_values
-from colon import (ColonTracker, Progress, proc_scale, to_small, edge_map, point_at, anchor_stations,
+from colon import (ColonTracker, Progress, proc_scale, to_small, gray_of, edge_map, point_at, anchor_stations,
                    strap_dist, lab_delta)
 from geometry import resample_closed, resample_open
 from pipeline import FramePipeline
@@ -45,6 +45,10 @@ STAGE2 = [
      "不勾: 不算光流, 曲线只靠边缘吸附修正 (假体几乎不动时可以试试, 也更快)。"),
     ("flow_smooth", "float", 0.0, 10.0, 0.5, "光流平滑",
      "光流场的空间平滑。大 = 运动更整体、抗噪; 小 = 保留局部变形。"),
+    ("flow_view_frames", "int", 1, 100, "Flow 视图跨度 (帧)",
+     "只影响右侧 Flow 视图: 显示当前帧与这么多帧之前之间的光流。追踪本身仍逐帧算光流, 但相邻两帧通常只动 0.01–0.1 px, "
+     "直接画出来看不见, 跨几十帧才看得出运动。颜色 = 方向 (见右上角色轮), 亮度/箭头长度 = 移动距离 (左下角写着满刻度多少 px); "
+     "黄色/青色短箭头 = 边缘点/中心线点从光流得到的位移。"),
     ("#", "header", "边缘图 (右侧选 Edge map 视图实时看效果)"),
     ("edge_channel", "combo", ["b", "gray", "L", "a", "S", "V", "R", "G", "B"], "边缘图通道",
      "在哪张图上找边缘: b = Lab 黄度 (假体偏黄), a = Lab 红绿, gray/L = 亮度, S = 饱和度, V = HSV 亮度, R/G/B = 单个颜色通道。"
@@ -138,6 +142,7 @@ STAGE3 = [
 NEEDS_RESTART = {"n_stations": "截面数量改了: 回到基线帧重新点 开始追踪 才生效",
                  "recent_frames": "回看帧数改了: 需从基线重新追踪才生效",
                  "exposure_comp": "曝光补偿: 对 change/recent_change 需从基线重新追踪才生效"}
+DISPLAY_ONLY = ("view_max", "flow_view_frames")  # only change the right-hand view: nothing is recomputed
 STAGE1_HELP = (
     "<b>步骤</b><br>"
     "1. 拖动进度条到机器人<b>还没进入</b>的帧, 点 <b>设为起点</b> (基线)。<br>"
@@ -505,6 +510,9 @@ class MainWindow(QtWidgets.QMainWindow):
         return sa
 
     def _set_param(self, name, value, redo):
+        if name in DISPLAY_ONLY:
+            setattr(self.p, name, value)
+            return self._show()
         old_mode = mode_key(self.p)
         setattr(self.p, name, value)
         if name in PER_MODE:  # remembered separately for each signal mode
@@ -773,6 +781,13 @@ class MainWindow(QtWidgets.QMainWindow):
         view = self.view_combo.currentText()
         if view.startswith("Edge") and "edge" not in vis:
             vis["edge"] = edge_map(small, self.p)[0]
+        if view.startswith("Flow") and self.ref_reader is not None:
+            # motion over flow_view_frames (one frame is ~0.1 px: invisible); also works when paused / reviewing
+            n = min(self.p.flow_view_frames, self.cur_idx)
+            old = self.ref_reader.read(self.cur_idx - n) if n > 0 else None
+            if old is not None:
+                vis["flow"] = tr.flow.compute(gray_of(to_small(old, scale)), gray_of(small))
+                vis["flow_frames"] = n
         if view.startswith(("Change", "Recent")) and tr.active:
             old = None  # reviewing: read the frame "recent" compares with
             if view.startswith("Recent") and not live and self.cur_idx >= tr.start_idx:

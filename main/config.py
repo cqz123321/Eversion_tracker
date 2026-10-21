@@ -16,6 +16,7 @@ class Params:
     # ---- stage 2: colon tracking ----
     follow_flow: bool = True
     flow_smooth: float = 2.0
+    flow_view_frames: int = 10      # Flow view only: show the motion over this many frames (per-frame flow is ~0.1 px)
     edge_channel: str = "b"
     edge_blur: int = 5
     edge_clahe: bool = False
