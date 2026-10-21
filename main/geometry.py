@@ -98,16 +98,29 @@ def snap_to_edges(pts, gx, gy, radius, polarity, mask):
     return (pts + nrm * shift[:, None]).astype(np.float32)
 
 
-def half_widths(mask, pts, nrm, rmax):
-    """Distance from each station to the mask border along +normal and -normal."""
+def half_widths(mask, pts, nrm, rmax, cap=0.0):
+    """Distance from each station to the mask border along +normal and -normal.
+
+    cap > 0: each side is at most cap x the inscribed radius (distance to the nearest border) at the station,
+    itself limited to 1.5x the median radius. At a tight bend the normal runs ALONG the tube and would reach
+    far into the colon (or into a touching limb); the inscribed radius stays the local half width."""
     offs = np.arange(1, rmax + 1, dtype=np.float32)
     m = mask.astype(np.float32)
+    limit = None
+    if cap > 0:
+        dt = cv2.distanceTransform((mask > 0).astype(np.uint8), cv2.DIST_L2, 5)
+        r = cv2.remap(dt, pts[:, 0].reshape(1, -1).astype(np.float32), pts[:, 1].reshape(1, -1).astype(np.float32),
+                      cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0).ravel()
+        r = np.maximum(r, 1.0)
+        limit = cap * np.minimum(r, 1.5 * float(np.median(r)))
     out = []
     for sgn in (1, -1):
         sx = (pts[:, 0, None] + sgn * nrm[:, 0, None] * offs[None]).astype(np.float32)
         sy = (pts[:, 1, None] + sgn * nrm[:, 1, None] * offs[None]).astype(np.float32)
         inside = cv2.remap(m, sx, sy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0) >= 127
         w = np.where(inside.all(1), rmax, np.argmin(inside, axis=1)).astype(np.float32)
+        if limit is not None:
+            w = np.minimum(w, limit)
         out.append(np.maximum(w, 1.0))
     return out[0], out[1]
 

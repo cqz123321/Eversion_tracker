@@ -30,6 +30,7 @@ class Params:
 
     # ---- stage 3: tip ----
     n_stations: int = 100           # centerline cross-sections (needs Start tracking again)
+    width_cap: float = 1.5          # each side of a cross-section <= this x the inscribed radius (0 = off)
     recent_frames: int = 5          # look-back of "recent_change" (needs re-tracking)
     feature: str = "change"
     compare: str = "pixel"          # change vs baseline at the same image pixel, or at the same colon point

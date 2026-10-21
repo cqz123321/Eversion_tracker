@@ -80,9 +80,10 @@ def strap_dist(lab, colors):
     return np.sqrt((d ** 2).sum(-1)).min(-1)
 
 
-def cross_section(ctr, mask, rmax):
-    nrm = normals(ctr, closed=False)
-    wp, wm = half_widths(mask, ctr, nrm, rmax)
+def cross_section(ctr, mask, rmax, cap=0.0):
+    # normals of a slightly smoothed centerline: at a kink the cross-sections fan out evenly instead of crossing
+    nrm = normals(smooth_open(ctr, 2.0), closed=False)
+    wp, wm = half_widths(mask, ctr, nrm, rmax, cap)
     off = np.where(OFFS >= 0, OFFS[None] * wp[:, None], OFFS[None] * wm[:, None])
     pts = ctr[:, None, :] + nrm[:, None, :] * off[..., None]
     return nrm, wp, wm, pts
@@ -112,7 +113,7 @@ class ColonTracker:
         self.prev = gray_of(small)
         self.start_idx = self.last_idx = idx
         mask = polygon_mask(self.bnd, self.shape)
-        _, wp, wm, pts = cross_section(self.ctr, mask, self.rmax)
+        _, wp, wm, pts = cross_section(self.ctr, mask, self.rmax, p.width_cap)
         self.base_width = wp + wm
         self.base_samples = sample(self.prev.astype(np.float32), pts)
         self.colon_len0 = arclength(self.ctr)[-1]
@@ -199,7 +200,7 @@ class ColonTracker:
         ctr = self.ctr + sample(f, self.ctr)
         if p.center_pull > 0:
             nrm = normals(ctr, closed=False)
-            wp, wm = half_widths(mask, ctr, nrm, self.rmax)
+            wp, wm = half_widths(mask, ctr, nrm, self.rmax, p.width_cap)
             # slow, smooth correction: capped per frame and smoothed along the centerline,
             # so boundary wobble (e.g. at tight bends) does not shake the centerline
             corr = np.clip(p.center_pull * (wp - wm) / 2, -0.5, 0.5)[:, None] * nrm
@@ -217,7 +218,7 @@ class ColonTracker:
 
     def _measure(self, ctr, mask, gray, lab, lab_old):
         """Per-station samples for one frame (stage 3 turns these into a signal)."""
-        _, wp, wm, pts = cross_section(ctr, mask, self.rmax)
+        _, wp, wm, pts = cross_section(ctr, mask, self.rmax, self.p.width_cap)
         h = dict(ctr=ctr.copy(), width=wp + wm, xs=pts,
                  samples=sample(gray.astype(np.float32), pts),
                  lab=sample(lab, pts), lab_base=sample(self.base_lab_img, pts))
