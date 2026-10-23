@@ -1,0 +1,46 @@
+{
+  "proc_width": 640,
+  "frame_step": 1,
+  "workers": 12,
+  "follow_flow": true,
+  "flow_smooth": 2.0,
+  "flow_view_frames": 10,
+  "edge_channel": "b",
+  "edge_blur": 5,
+  "edge_clahe": false,
+  "edge_min": 0.0,
+  "edge_polarity": "inside_higher",
+  "snap_radius": 5,
+  "snap_weight": 0.5,
+  "shape_smooth": 2.0,
+  "center_pull": 0.3,
+  "shape_keep": 0.02,
+  "n_stations": 100,
+  "width_cap": 1.5,
+  "recent_frames": 5,
+  "feature": "recent_change",
+  "compare": "material",
+  "light_weight": 1.0,
+  "strap_tol": 0.0,
+  "strip_frac": 0.6,
+  "exposure_comp": true,
+  "normalize": true,
+  "sig_thresh": 1.0,
+  "collective_q": 0.5,
+  "view_max": 40.0,
+  "mode_values": {
+    "change_norm": {
+      "sig_thresh": 0.5
+    },
+    "recent_change": {
+      "sig_thresh": 1.0,
+      "collective_q": 0.5
+    }
+  },
+  "sig_time_frames": 1,
+  "tip_rule": "ridge",
+  "max_gap": 8,
+  "max_speed": 10.0,
+  "tip_alpha": 1.0,
+  "monotonic": true
+}
