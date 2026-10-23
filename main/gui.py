@@ -10,6 +10,7 @@ Keys:   Space play/pause, Right step
 import argparse
 import csv
 import glob
+import gzip
 import json
 import os
 import sys
@@ -32,6 +33,7 @@ from config import Params, PER_MODE, mode_key, mode_values
 from colon import (ColonTracker, Progress, proc_scale, to_small, gray_of, edge_map, point_at, anchor_stations,
                    strap_dist, lab_delta)
 from geometry import resample_closed, resample_open
+from curves_io import curves_line
 from pipeline import FramePipeline
 import viz
 
@@ -442,14 +444,36 @@ class MainWindow(QtWidgets.QMainWindow):
             grid.addWidget(b, r, c)
             return b
         gbtn("设当前帧为起点", self.set_start_frame, 0, 0, "基线帧: 机器人还没进入")
-        gbtn("设当前帧为终点", self.set_end_frame, 0, 1, "机器人走到最远的帧; 追踪到这里停止")
+        def gpair(r, c, *specs):
+            # several buttons side by side in one grid cell; buttons are parented to the cell widget
+            cell = QtWidgets.QWidget()
+            h = QtWidgets.QHBoxLayout(cell)
+            h.setContentsMargins(0, 0, 0, 0)
+            out = []
+            for text, slot, tip in specs:
+                b = QtWidgets.QPushButton(text, cell)
+                if slot is not None:
+                    b.clicked.connect(slot)
+                b.setToolTip(tip)
+                h.addWidget(b)
+                out.append(b)
+            grid.addWidget(cell, r, c)
+            return out
+        gpair(0, 1, ("设当前帧为终点", self.set_end_frame, "机器人走到最远的帧; 追踪到这里停止"),
+              ("取消终点", self.clear_end_frame,
+               "不再使用终点帧: 追踪到视频结尾; 已画的终点曲线保留但不使用, 重新设终点后恢复"))
         self.kf_lbl = QtWidgets.QLabel()
         grid.addWidget(self.kf_lbl, 1, 0, 1, 2)
         self.mode_btns = {}
         for key, text, r, c in (("bnd", "起点边缘", 2, 0), ("ctr", "起点中心线 (H→T)", 2, 1),
                                 ("bnd_end", "终点边缘", 3, 0), ("ctr_end", "终点中心线 (H→T)", 3, 1),
                                 ("tips", "标尖端 (任意帧)", 4, 0), ("straps", "选条带颜色", 4, 1)):
-            b = gbtn(text, lambda _=False, k=key: self.set_edit(k), r, c)
+            slot = lambda _=False, k=key: self.set_edit(k)
+            if key == "tips":   # shares its cell with "clear all tips"
+                b, _ = gpair(r, c, (text, slot, ""),
+                             ("清除所有尖端标注", self.clear_all_tips, "删除所有帧上的尖端标注 (会先确认)"))
+            else:
+                b = gbtn(text, slot, r, c)
             b.setCheckable(True)
             self.mode_btns[key] = b
         gbtn("终点复制起点曲线", self.copy_start_to_end, 5, 0, "终点边缘/中心线 = 起点的, 然后拖点修改")
@@ -854,6 +878,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self._update_kf_label()
         self._show()
 
+    def clear_end_frame(self):
+        if self.end_frame is None:
+            return
+        self.end_frame = None
+        if self.edit_mode in ("bnd_end", "ctr_end"):
+            self.set_edit(None)
+        self._update_kf_label()
+        self._show()
+
     def set_edit(self, mode):
         if mode and self.timer.isActive():
             self.toggle_play()
@@ -877,6 +910,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ann["tips"] = [t for t in self.ann["tips"] if t[0] != self.cur_idx]
         else:
             self.ann[mode] = []
+        self._ann_changed()
+
+    def clear_all_tips(self):
+        n = len(self.ann["tips"])
+        if n == 0:
+            return
+        r = QtWidgets.QMessageBox.question(self, "清除尖端标注", f"删除全部 {n} 个尖端标注?")
+        if r != QtWidgets.QMessageBox.Yes:
+            return
+        self.ann["tips"] = []
         self._ann_changed()
 
     def _ann_changed(self):
@@ -1109,17 +1152,16 @@ class MainWindow(QtWidgets.QMainWindow):
         stem = os.path.splitext(path)[0]
         s = 1.0 / self.tracker.scale
         with open(stem + ".csv", "w", newline="", encoding="utf-8") as cf, \
-                open(stem + "_curves.jsonl", "w", encoding="utf-8") as jf:
+                gzip.open(stem + "_curves.jsonl.gz", "wt", encoding="utf-8", newline="\n") as jf:
             w = None
             for k, h, row in self._rows():
                 if w is None:
                     w = csv.DictWriter(cf, fieldnames=list(row))
                     w.writeheader()
                 w.writerow(row)
-                jf.write(json.dumps(dict(frame=k, boundary=np.round(h["bnd"] * s, 1).tolist(),
-                                         centerline=np.round(h["ctr"] * s, 1).tolist())) + "\n")
+                jf.write(curves_line(k, h["bnd"] * s, h["ctr"] * s))
         self.p.save(stem + "_params.json")
-        self.status.showMessage(f"已导出 {stem}.csv / _curves.jsonl / _params.json", 8000)
+        self.status.showMessage(f"已导出 {stem}.csv / _curves.jsonl.gz / _params.json", 8000)
 
     def export_video(self):
         """One video, same layout as the window: left = original frame with the robot only (pink body, red tip,

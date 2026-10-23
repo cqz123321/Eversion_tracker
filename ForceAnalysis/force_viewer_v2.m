@@ -751,8 +751,9 @@ if nargout > 0, out = fig; end   % do not clear fig: callbacks share it
 end
 
 function [B, C] = loadCurves(jsonl, dlg)
-%LOADCURVES Read '<video>_track_curves.jsonl' (boundary + centerline per frame).
+%LOADCURVES Read '<video>_track_curves.jsonl[.gz]' (boundary + centerline per frame).
 %   The parsed arrays are cached in tempdir, keyed by file name and size.
+%   A '.gz' file is unzipped to a temporary folder first.
 B = []; C = [];
 if ~isfile(jsonl), return; end
 info = dir(jsonl);
@@ -763,6 +764,16 @@ if isfile(cache)
     S = load(cache);
     B = S.B; C = S.C;
     return;
+end
+
+if endsWith(jsonl, '.gz', 'IgnoreCase', true)
+    dlg.Message = 'Unzipping colon curves...';
+    tmp = tempname;
+    mkdir(tmp);
+    rmTmp = onCleanup(@() rmdir(tmp, 's'));
+    out = gunzip(jsonl, tmp);
+    jsonl = out{1};
+    info = dir(jsonl);
 end
 
 fid = fopen(jsonl, 'r');
@@ -799,7 +810,8 @@ function p = guessTrackFiles(csv)
 [folder, base] = fileparts(csv);
 vbase = erase(base, '_track');
 p.csv = csv;
-p.curves = existing(fullfile(folder, [base '_curves.jsonl']));
+p.curves = existing(fullfile(folder, [base '_curves.jsonl.gz']));
+if isempty(p.curves), p.curves = existing(fullfile(folder, [base '_curves.jsonl'])); end
 p.video = '';
 for ext = {'.mp4', '.MP4', '.avi', '.mov', '.MOV'}
     p.video = existing(fullfile(folder, [vbase ext{1}]));
@@ -817,7 +829,7 @@ function files = askTrackFiles(parent, files)
 %   Returns [] when cancelled.
 rows = { ...
     'csv',    'Track CSV (required)',   {'*.csv', 'Track CSV (*.csv)'}; ...
-    'curves', 'Colon curves (.jsonl)',  {'*.jsonl', 'Curves JSONL (*.jsonl)'}; ...
+    'curves', 'Colon curves (.jsonl)',  {'*.jsonl;*.gz', 'Curves JSONL (*.jsonl, *.jsonl.gz)'}; ...
     'video',  'Video',                  {'*.mp4;*.avi;*.mov', 'Video (*.mp4, *.avi, *.mov)'}; ...
     'sync',   'Sync (.json, optional)', {'*.json', 'Sync JSON (*.json)'}};
 pp = parent.Position;
