@@ -402,7 +402,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         nav = QtWidgets.QHBoxLayout()
         self.slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.slider.sliderReleased.connect(lambda: self.go_to(self.slider.value()))
+        # valueChanged (not sliderReleased): clicking the groove, the mouse wheel and arrow keys also move
+        # the frame. With tracking off, a drag still only jumps once, when the handle is released.
+        self.slider.setTracking(False)
+        self.slider.valueChanged.connect(self.go_to)
         self.frame_lbl = QtWidgets.QLabel("-")
         self.frame_lbl.setMinimumWidth(160)
         nav.addWidget(self.slider, 1)
@@ -869,6 +872,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.end_frame = None
         self._update_kf_label()
         self._show()
+        self.status.showMessage(f"起点已设为帧 {self.start_frame}。起点边缘/中心线请在这一帧上检查或重画, "
+                                f"再点 开始追踪", 6000)
 
     def set_end_frame(self):
         if self.cur_idx <= self.start_frame:
