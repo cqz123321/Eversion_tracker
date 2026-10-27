@@ -1,0 +1,13 @@
+{
+ "video": "Mvi 1431 M 08 G",
+ "video_file": "Mvi 1431 M 08 G.mp4",
+ "n_frames": 10814,
+ "n_stations": 100,
+ "first_frame": 0,
+ "last_frame": 10813,
+ "fps": 50.0,
+ "thresh": 0.75,
+ "collective_q": 0.5,
+ "feature": "recent_change",
+ "csv": "Mvi 1431 M 08 G_kymograph.csv"
+}

@@ -1,0 +1,13 @@
+{
+ "video": "Mvi 1419 Mo 05 G",
+ "video_file": "Mvi 1419 Mo 05 G.mp4",
+ "n_frames": 6506,
+ "n_stations": 100,
+ "first_frame": 0,
+ "last_frame": 6505,
+ "fps": 50.0,
+ "thresh": 1.0,
+ "collective_q": 0.5,
+ "feature": "recent_change",
+ "csv": "Mvi 1419 Mo 05 G_kymograph.csv"
+}

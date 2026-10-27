@@ -1,0 +1,35 @@
+Trial,MaxPosition,MaxF_Sigmoid_N,MaxF_N,MaxP1_Sigmoid,MaxP1,TimeToMaxPosition_s,MaxRetractionF_N,RetractionTime_s,Notes,Folder
+S1,0.39 m (Sigmoid),0.685,0.685,90.29,90.29,49.5,0.318,26.8,"",small size / test 1
+S2,0.67 m (Splenic flexure),0.665,0.665,NaN,NaN,61.8,NaN,NaN,"no pressure; no retraction force file",small size / test 2
+S3,0.41 m (Descending colon),0.229,0.258,87.03,90.32,250,0.128,NaN,"no retraction video: force over the whole file, no retraction time",small size / test 3
+S4,0.44 m (Descending colon),0.836,0.937,87.03,98.18,37.8,NaN,NaN,"no retraction force file",small size / test 4
+S5,0.87 m (Transverse colon),0.7,0.7,91,91,351.2,NaN,NaN,"no retraction force file",small size / test 5
+S6,0.41 m (Sigmoid),0.484,0.484,95.7,95.7,155.3,NaN,NaN,"no retraction force file",small size / test 6
+S7,0.40 m (Sigmoid),0.954,0.954,90.54,90.54,22.3,NaN,NaN,"no retraction force file",small size / test 7
+S8,0.39 m (Sigmoid),0.75,0.75,90.03,90.03,66.3,NaN,NaN,"no retraction force file",small size / test 8
+S9,,NaN,0.67,NaN,91.25,NaN,NaN,NaN,"no go video; no retraction force file",small size / test 9
+S10,,NaN,1.007,NaN,95.5,NaN,0.327,NaN,"no go video; no retraction video: force over the whole file, no retraction time",small size / test 10
+M1,0.95 m (Hepatic flexure),1.869,1.869,35.24,35.24,147.4,NaN,NaN,"no retraction force file",Medim size / test 1
+M2,1.17 m (Ascending colon),1.08,2.738,34.6,45.39,132.9,0.512,NaN,"no retraction video: force over the whole file, no retraction time",Medim size / test 2
+M3,1.18 m (Ascending colon),NaN,2.571,NaN,NaN,104.4,0.548,25,"go video not synced; force / pressure / video do not overlap; tip not in the sigmoid within the window; retraction video not synced",Medim size / test 3
+M4,0.70 m (Splenic flexure),2.24,2.24,45.13,45.13,357.8,1.935,NaN,"no retraction video: force over the whole file, no retraction time",Medim size / test 4
+M5,0.95 m (Hepatic flexure),1.682,2.054,36.17,50.6,107.4,0.545,NaN,"no retraction video: force over the whole file, no retraction time",Medim size / test 5
+M6,1.23 m (Ascending colon),0.795,0.795,34.63,47,104,0.358,20.2,"",Medim size / test 6
+M7,1.20 m (Ascending colon),1.997,2.633,40.59,50.6,118,0.526,28.9,"",Medim size / test 7
+M8,1.20 m (Ascending colon),0.869,0.935,30.12,53.02,178.2,0.451,NaN,"no retraction video: force over the whole file, no retraction time",Medim size / test 8
+M9,1.23 m (Ascending colon),0.412,0.412,25.55,48.61,98,0.504,NaN,"no retraction video: force over the whole file, no retraction time",Medim size / test 9
+L1,0.87 m (Transverse colon),2.249,2.249,20.17,20.62,129.9,0.422,NaN,"no retraction video: force over the whole file, no retraction time",large size / test 1
+L2,0.94 m (Hepatic flexure),2.803,3.533,23.16,33.11,65.6,0.311,NaN,"no retraction video: force over the whole file, no retraction time",large size / test 2
+L3,0.42 m (Sigmoid),4.68,4.68,34.21,34.21,17.1,NaN,NaN,"no retraction force file",large size / test 3
+L5,0.61 m (Descending colon),0.979,1.89,16.82,30.47,60.8,4.286,NaN,"no retraction video: force over the whole file, no retraction time",large size / test 5
+L6,1.20 m (Ascending colon),2.952,3.212,28.99,30.63,187.1,0.581,NaN,"no retraction video: force over the whole file, no retraction time",large size / test 6
+L7,1.21 m (Ascending colon),2.736,2.803,20.55,32.21,31.8,0.352,NaN,"no retraction video: force over the whole file, no retraction time",large size / test 7
+L8,1.24 m (Cecum),4.471,5.488,25.13,30.6,46.1,0.93,61.5,"",large size / test 8
+Mo1,0.97 m (Hepatic flexure),0.594,2.193,NaN,NaN,155.8,0.438,69.2,"no pressure",Mo / test 1
+Mo2,0.98 m (Hepatic flexure),0.434,0.597,NaN,NaN,189.4,0.551,65.1,"no pressure",Mo / test 2
+Mo3,1.17 m (Ascending colon),1.113,1.113,NaN,NaN,139.1,0.68,86.1,"no pressure",Mo / test 3
+Mo4,1.18 m (Ascending colon),0.847,1.484,NaN,NaN,93.9,0.714,80.9,"no pressure",Mo / test 4
+Mo5,1.18 m (Ascending colon),0.867,1.505,NaN,NaN,107.6,0.708,NaN,"no pressure; no retraction video: force over the whole file, no retraction time",Mo / test 5
+Mo6,1.17 m (Ascending colon),0.959,2.332,NaN,NaN,92.8,0.734,NaN,"no pressure; no retraction video: force over the whole file, no retraction time",Mo / test 6
+Mo7,1.15 m (Ascending colon),0.524,1.598,NaN,NaN,113.6,0.515,47.4,"no pressure",Mo / test 7
+Mo8,1.16 m (Ascending colon),0.462,2.062,NaN,NaN,139,0.354,61.7,"no pressure",Mo / test 8

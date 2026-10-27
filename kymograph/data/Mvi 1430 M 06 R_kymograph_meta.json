@@ -1,0 +1,13 @@
+{
+ "video": "Mvi 1430 M 06 R",
+ "video_file": "Mvi 1430 M 06 R.mp4",
+ "n_frames": 2612,
+ "n_stations": 100,
+ "first_frame": 0,
+ "last_frame": 2611,
+ "fps": 50.0,
+ "thresh": 1.0,
+ "collective_q": 0.5,
+ "feature": "recent_change",
+ "csv": "Mvi 1430 M 06 R_kymograph.csv"
+}

@@ -1,0 +1,13 @@
+{
+ "video": "Mvi 1397  S 01 R",
+ "video_file": "Mvi 1397  S 01 R.mp4",
+ "n_frames": 1868,
+ "n_stations": 100,
+ "first_frame": 0,
+ "last_frame": 1867,
+ "fps": 50.0,
+ "thresh": 1.0,
+ "collective_q": 0.5,
+ "feature": "recent_change",
+ "csv": "Mvi 1397  S 01 R_kymograph.csv"
+}

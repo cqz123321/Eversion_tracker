@@ -1,0 +1,13 @@
+{
+ "video": "Mvi 1414 Mo 02 R",
+ "video_file": "Mvi 1414 Mo 02 R.mp4",
+ "n_frames": 5946,
+ "n_stations": 100,
+ "first_frame": 0,
+ "last_frame": 5945,
+ "fps": 50.0,
+ "thresh": 1.0,
+ "collective_q": 0.5,
+ "feature": "recent_change",
+ "csv": "Mvi 1414 Mo 02 R_kymograph.csv"
+}
