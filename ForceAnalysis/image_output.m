@@ -7,6 +7,44 @@ function S = image_output(varargin)
 %   image_output('Recordings', 'L 01')   recordings whose label contains this text
 %   image_output('Mark', true)           set / edit the segment cuts first
 %
+%
+%   All settings are in the SETTINGS block right below; edit there and run  image_output.
+%   How it works: see the comment block after SETTINGS.
+
+
+%% ======================= SETTINGS - edit here, then just run  image_output =======================
+% (a name-value argument, e.g. image_output('FontSize', 12), still overrides a value for one run)
+here = fileparts(mfilename('fullpath'));
+S0 = struct();
+% ---- what to export
+S0.Recordings     = 'all';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
+S0.Silhouette     = true;       % also export <recording>_colon.png (slower; false = only the curve figures)
+S0.Show           = false;      % keep the figures open on screen
+S0.Mark           = false;      % set / edit the segment cuts first
+% ---- figure look
+S0.FigSize        = [8.5 11];   % [width height] in cm; three side by side fit on a page
+S0.FontSize       = 10;         % pt
+S0.FontName       = 'Calibri';
+S0.ShowInfo       = false;      % small info lines under the title (video, sync, cuts, direction)
+S0.ShowP1des      = false;      % also draw P1 desired
+S0.PressureLabel  = 'P (kPa)';       % y label of the pressure panel
+S0.FullLengthAxis = true;       % position panel always 0 .. ColonLength
+S0.TileSpacing    = 'none';    % gap between the three panels: 'none' | 'tight' | 'compact' | 'loose'
+S0.Padding        = 'tight';    % margin around the whole figure: 'tight' | 'compact' | 'loose'
+% ---- data
+S0.ColonLength    = 1.35;       % m
+S0.SegSmooth      = 1;          % s, moving median of the position before finding the segments
+S0.ZeroForce      = false;      % subtract the mean of the first 0.5 s of each force file
+S0.ForceSmooth    = 1;          % moving mean of the force, samples (1 = none)
+% ---- folders
+S0.Root           = fullfile(here, '..', 'Forcedata');
+S0.VideoDir       = fullfile(here, '..', 'compressedvideo');
+S0.CorrectedDir   = fullfile(here, '..', 'Corrected_video');
+S0.FigDir         = fullfile(here, '..', 'Figures');
+S0.Cuts           = fullfile(here, 'colon_cuts.json');
+%% ==================================================================================================
+
+%% ---------------------------------------------------------------- how it works
 %   Figure (<recording>.png): three panels sharing the x axis (test time, s)
 %     1. |F| = sqrt(Fx^2 + Fy^2 + Fz^2)  (N)
 %     2. Pressure P1
@@ -54,41 +92,11 @@ function S = image_output(varargin)
 %   Outputs in FigDir (default ../Figures): the PNGs and segment_summary.csv
 %   (one row per recording and segment: entry / exit time, duration, mean and
 %   max |F|, mean P1).
-%
-%   Options (name-value)
-%     Root, VideoDir, CorrectedDir   as in force_viewer_v3
-%     FigDir          output folder                     (../Figures)
-%     Recordings      'all' | 'pick' | text | indices   ('all')
-%     ColonLength     m                                 (1.35)
-%     Cuts            json file                         (colon_cuts.json here)
-%     Mark            set / edit the cuts first         (false)
-%     SegSmooth       s, moving median of the position  (1)
-%     FullLengthAxis  panel 3 shows 0..ColonLength      (true)
-%     ZeroForce       subtract the first 0.5 s mean     (false)
-%     ForceSmooth     moving mean, samples              (1 = none)
-%     ShowP1des       also draw P1 desired              (false)
-%     PressureLabel   y label of panel 2                ('P1')
-%     Silhouette      export the silhouette PNGs        (true)
-%     Show            keep the figures open             (false)
 
-here = fileparts(mfilename('fullpath'));
 ip = inputParser;
-ip.addParameter('Root', fullfile(here, '..', 'Forcedata'));
-ip.addParameter('VideoDir', fullfile(here, '..', 'compressedvideo'));
-ip.addParameter('CorrectedDir', fullfile(here, '..', 'Corrected_video'));
-ip.addParameter('FigDir', fullfile(here, '..', 'Figures'));
-ip.addParameter('Recordings', 'all');
-ip.addParameter('ColonLength', 1.35);
-ip.addParameter('Cuts', fullfile(here, 'colon_cuts.json'));
-ip.addParameter('Mark', false);
-ip.addParameter('SegSmooth', 1);
-ip.addParameter('FullLengthAxis', true);
-ip.addParameter('ZeroForce', false);
-ip.addParameter('ForceSmooth', 1);
-ip.addParameter('ShowP1des', false);
-ip.addParameter('PressureLabel', 'P1');
-ip.addParameter('Silhouette', true);
-ip.addParameter('Show', false);
+for f = fieldnames(S0)'
+    ip.addParameter(f{1}, S0.(f{1}));
+end
 ip.parse(varargin{:});
 o = ip.Results;
 
@@ -295,29 +303,41 @@ pos = SG.frac * o.ColonLength;
 % ---- time window = overlap of video track, force and pressure (the shortest record decides each end).
 %      A record that does not overlap the others at all (e.g. the pressure of a retraction video, which
 %      covers the go phase only) is left out of the overlap and its panel says so.
+isR = strcmpi(TK.role, 'R');      % retraction: no pressure panel (the pressure record covers the go phase)
 spans = {[tT(1), tT(end)], [min(tF), max(tF)]};
-if hasP, spans{3} = [tP(1), tP(end)]; end
+if hasP && ~isR, spans{3} = [tP(1), tP(end)]; end
 [tLo, tHi, used] = overlapWindow(spans);
 hasF = used(2);
-hasPw = hasP && used(3);
+hasPw = hasP && ~isR && used(3);
+% the figure starts at 0 s: shift every record by the start of the window
+t0 = tLo;
+tF = tF - t0; tT = tT - t0;
+if hasP, tP = tP - t0; end
+tLo = 0; tHi = tHi - t0;
 inF = tF >= tLo & tF <= tHi;
 bands = segmentBands(tT, SG.lab, tLo, tHi);
 
-fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 18 17], 'Visible', onOff(o.Show));
-tl = tiledlayout(fig, 3, 1, 'TileSpacing', 'compact', 'Padding', 'compact');
+nPan = 3 - isR;
+figSize = o.FigSize;
+if isR, figSize(2) = o.FigSize(2) * 0.7; end   % same panel height with one panel less
+fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 figSize], 'Visible', onOff(o.Show), ...
+    'DefaultAxesFontName', o.FontName, 'DefaultTextFontName', o.FontName, ...
+    'DefaultAxesFontSize', o.FontSize, 'DefaultLegendFontName', o.FontName);
+tl = tiledlayout(fig, nPan, 1, 'TileSpacing', o.TileSpacing, 'Padding', o.Padding);
 ax = gobjects(1, 3);
 
 ax(1) = nexttile(tl);
 plot(ax(1), tF, Fm, '-', 'Color', [0.58 0.40 0.74], 'LineWidth', 1.1);
 ylabel(ax(1), '|F| (N)');
 if hasF
-    setYRange(ax(1), Fm(inF), 0.22);
+    setYRange(ax(1), Fm(inF), 0.32);   % headroom for the segment names
 else
     ylim(ax(1), [0 1]);
     text(ax(1), 0.5, 0.5, 'force record does not overlap this video', 'Units', 'normalized', ...
-        'HorizontalAlignment', 'center', 'Color', [0.5 0.5 0.5]);
+        'HorizontalAlignment', 'center', 'Color', 'k', 'FontSize', o.FontSize - 1);
 end
 
+if ~isR
 ax(2) = nexttile(tl);
 if hasPw
     plot(ax(2), tP, P1, '-', 'Color', [0.49 0.18 0.56], 'LineWidth', 1.1, 'DisplayName', 'P1');
@@ -333,9 +353,10 @@ else
     ylim(ax(2), [0 1]);
     if hasP, msg = 'pressure record does not overlap this video'; else, msg = 'no pressure record'; end
     text(ax(2), 0.5, 0.5, msg, 'Units', 'normalized', ...
-        'HorizontalAlignment', 'center', 'Color', [0.5 0.5 0.5]);
+        'HorizontalAlignment', 'center', 'Color', 'k', 'FontSize', o.FontSize - 1);
 end
 ylabel(ax(2), o.PressureLabel);
+end
 
 ax(3) = nexttile(tl);
 plot(ax(3), tT, pos, '-', 'Color', [0.10 0.50 0.55], 'LineWidth', 1.4);
@@ -347,44 +368,48 @@ else
     setYRange(ax(3), pos(tT >= tLo & tT <= tHi), 0.05);
 end
 
+if isR, ax = ax([1 3]); end       % the panels that exist, top to bottom
 linkaxes(ax, 'x');
 xlim(ax(1), [tLo tHi]);
 for a = ax
-    set(a, 'Box', 'on', 'Layer', 'top', 'FontSize', 9, 'TickDir', 'out', 'XGrid', 'on', 'YGrid', 'on', ...
+    set(a, 'Box', 'on', 'Layer', 'top', 'FontSize', o.FontSize, 'FontName', o.FontName, 'XColor', 'k', ...
+        'YColor', 'k', 'TickDir', 'out', 'XGrid', 'on', 'YGrid', 'on', ...
         'GridAlpha', 0.12);
 end
-set(ax(1:2), 'XTickLabel', []);
+set(ax(1:end - 1), 'XTickLabel', []);
 
 if SG.has
-    for a = ax, drawTimeBands(a, bands, cols); end   % same bands in all three panels
-    labelTimeBands(ax(1), bands, short);
+    for a = ax, drawTimeBands(a, bands, cols); end   % same bands in all panels
+    labelTimeBands(ax(1), bands, short, o.FontSize - 2);
     for a = ax
         for b = 2:numel(bands)
             xline(a, bands(b).t1, ':', 'Color', [0.35 0.35 0.35], 'LineWidth', 0.6, 'HandleVisibility', 'off');
         end
     end
     if ~isempty(SG.edges)
-        drawLengthBands(ax(3), SG.edges * o.ColonLength, names);
+        drawLengthBands(ax(end), SG.edges * o.ColonLength, short, o.FontSize - 1);
     end
 end
 
-title(tl, sprintf('%s  —  %s  (%s)', D.label, roleName(TK.role), strtrim(TK.name)), ...
-    'Interpreter', 'none', 'FontSize', 10, 'FontWeight', 'bold');
+title(tl, sprintf('%s  —  %s', D.label, roleName(TK.role)), ...
+    'Interpreter', 'none', 'FontSize', o.FontSize + 1, 'FontWeight', 'bold', 'FontName', o.FontName, 'Color', 'k');
 if SG.has, segTxt = SG.src; else, segTxt = 'no segment cuts'; end
-subtitle(tl, sprintf('t = 0 at %s   |   video: %s   |   %s   |   %s', ...
-    char(string(D.t0, 'yyyy-MM-dd HH:mm:ss')), TK.sync, segTxt, SG.orientTxt), ...
-    'Interpreter', 'none', 'FontSize', 7.5, 'Color', [0.4 0.4 0.4]);
+if o.ShowInfo
+    subtitle(tl, {sprintf('%s   |   t = 0 at %s', strtrim(TK.name), char(string(D.t0, 'yyyy-MM-dd HH:mm:ss'))), ...
+        sprintf('video: %s', TK.sync), segTxt, SG.orientTxt}, ...
+        'Interpreter', 'none', 'FontSize', o.FontSize - 3, 'FontName', o.FontName, 'Color', 'k');
+end
 
 st = struct('name', {}, 't1', {}, 't2', {}, 'Fmean', {}, 'Fmax', {}, 'Pmean', {});
 for b = 1:numel(bands)
     t1 = bands(b).t1; t2 = bands(b).t2;
     f = Fm(tF >= t1 & tF < t2);
     s.name = names{bands(b).k};
-    s.t1 = t1; s.t2 = t2;
+    s.t1 = t1 + t0; s.t2 = t2 + t0;     % segment_summary.csv stays on test time
     s.Fmean = mean(f, 'omitnan');
     s.Fmax = max([f; nan], [], 'omitnan');
     s.Pmean = nan;
-    if hasP, s.Pmean = mean(P1(tP >= t1 & tP < t2), 'omitnan'); end
+    if hasPw, s.Pmean = mean(P1(tP >= t1 & tP < t2), 'omitnan'); end
     st(end + 1) = s; %#ok<AGROW>
 end
 end
@@ -426,20 +451,27 @@ end
 if ~isempty(h), uistack(h, 'bottom'); end
 end
 
-function labelTimeBands(ax, bands, short)
+function labelTimeBands(ax, bands, short, fs)
+%LABELTIMEBANDS Segment names inside the top of the panel. Each name goes in the first row (of 3) where it
+%   does not overlap the previous name of that row, using the real text width.
 yl = ylim(ax); xl = xlim(ax);
-row = 0;
+rowY = yl(2) - (0.03 + 0.11 * (0:2)) * diff(yl);
+rowRight = -inf(1, 3);
+gap = 0.01 * diff(xl);
 for b = 1:numel(bands)
-    wdt = (bands(b).t2 - bands(b).t1) / diff(xl);
-    if wdt < 0.07, row = 1 - row; else, row = 0; end
-    y = yl(2) - (0.03 + 0.09 * row) * diff(yl);
-    text(ax, (bands(b).t1 + bands(b).t2) / 2, y, short{bands(b).k}, ...
-        'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 7.5, ...
-        'Color', [0.25 0.25 0.25], 'Clipping', 'on');
+    xc = (bands(b).t1 + bands(b).t2) / 2;
+    h = text(ax, xc, rowY(1), short{bands(b).k}, 'HorizontalAlignment', 'center', ...
+        'VerticalAlignment', 'top', 'FontSize', fs, 'Color', 'k', 'Clipping', 'on', 'Units', 'data');
+    e = get(h, 'Extent');                     % [x y w h] in data units
+    left = xc - e(3) / 2; right = xc + e(3) / 2;
+    r = find(left > rowRight + gap, 1);
+    if isempty(r), [~, r] = min(rowRight); end
+    h.Position(2) = rowY(r);
+    rowRight(r) = right;
 end
 end
 
-function drawLengthBands(ax, edges, names)
+function drawLengthBands(ax, edges, names, fs)
 %DRAWLENGTHBANDS Segment boundaries on the position axis (thin dashed lines) and names on the right.
 xl = xlim(ax); yl = ylim(ax);
 for k = 2:numel(edges) - 1
@@ -454,16 +486,17 @@ vis = c >= yl(1) & c <= yl(2) & diff(edges) > 0;
 yyaxis(ax, 'right');
 ylim(ax, yl);
 set(ax, 'YTick', c(vis), 'YTickLabel', names(vis));
-ax.YAxis(2).Color = [0.3 0.3 0.3];
-ax.YAxis(2).FontSize = 7.5;
+ax.YAxis(2).Color = 'k';
+ax.YAxis(2).FontSize = fs;
 yyaxis(ax, 'left');
-ax.YAxis(1).Color = [0.15 0.15 0.15];
+ax.YAxis(1).Color = 'k';
 end
 
 %% ======================= silhouette =======================
 function fig = makeSilhouette(files, TK, SG, ttl, o)
 [names, short, cols] = segNames();
-fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 19 14], 'Visible', onOff(o.Show));
+fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 19 14], 'Visible', onOff(o.Show), ...
+    'DefaultAxesFontName', o.FontName, 'DefaultTextFontName', o.FontName, 'DefaultLegendFontName', o.FontName);
 ax = axes(fig);
 hold(ax, 'on');
 im = [];
@@ -528,16 +561,16 @@ axis(ax, 'image');
 ax.YDir = 'reverse';
 ax.XTick = []; ax.YTick = [];
 if ~isempty(im), axis(ax, [0.5 size(im, 2) + 0.5 0.5 size(im, 1) + 0.5]); end
-title(ax, ttl, 'Interpreter', 'none', 'FontSize', 9);
+title(ax, ttl, 'Interpreter', 'none', 'FontSize', 10, 'Color', 'k');
 subtitle(ax, {sprintf('frame %d   |   %s   |   %s', TK.frame(1), SG.orientTxt, SG.fitTxt), ...
     'colon cut perpendicular to the centerline; tip path dots coloured by assigned segment (green = first, red = last)'}, ...
-    'Interpreter', 'none', 'FontSize', 7.5);
+    'Interpreter', 'none', 'FontSize', 8, 'Color', 'k');
 hl = gobjects(1, numel(names));   % legend entries only
 for k = 1:numel(names)
     hl(k) = plot(ax, nan, nan, 's', 'MarkerSize', 9, 'MarkerFaceColor', cols(k, :), ...
         'MarkerEdgeColor', 'none', 'DisplayName', names{k});
 end
-legend(ax, hl, 'Location', 'eastoutside', 'Box', 'off', 'FontSize', 8);
+legend(ax, hl, 'Location', 'eastoutside', 'Box', 'off', 'FontSize', 9, 'TextColor', 'k');
 end
 
 function h = drawSegmentArea(ax, bnd, c, edges, cols, alpha)

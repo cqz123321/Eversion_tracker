@@ -108,9 +108,9 @@ Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Ascending colon
 Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Rectum,19.6,33.32,13.72,0.0413932205295212,0.109350810296683,11.9769761625314
 Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Sigmoid,33.32,47.14,13.82,0.316287259175806,0.412324331871468,24.2891149465417
 Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Descending colon,47.14,107.18,60.04,0.278945267812879,0.403847468208175,27.3659513741381
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Splenic flexure,107.18,107.92,0.739999999999995,0.22225173485472,0.298219172440933,35.7415741598483
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Transverse colon,107.92,109.94,2.02,0.158801981914987,0.201732346522538,35.9166280999106
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Hepatic flexure,109.94,111.36,1.42,0.163039012381843,0.189324498468755,36.1339121081444
+Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Splenic flexure,107.18,107.92,0.739999999999981,0.22225173485472,0.298219172440933,35.7415741598483
+Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Transverse colon,107.92,109.94,2.02000000000001,0.158801981914987,0.201732346522538,35.9166280999106
+Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Hepatic flexure,109.94,111.36,1.41999999999999,0.163039012381843,0.189324498468755,36.1339121081444
 Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Ascending colon,111.36,132.04,20.68,0.211828306163043,0.27915508268138,43.1646570331354
 Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Rectum,7.2,17.86,10.66,0.11000744268966,0.372581518848294,NaN
 Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Sigmoid,17.86,25.3,7.44,0.311199460611353,0.594444886746398,NaN
