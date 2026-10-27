@@ -17,8 +17,9 @@ function S = image_output(varargin)
 here = fileparts(mfilename('fullpath'));
 S0 = struct();
 % ---- what to export
-S0.Recordings     = 'Mo /';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
+S0.Recordings     = 'Mo 01';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
 S0.Silhouette     = true;       % also export <recording>_colon.png (slower; false = only the curve figures)
+S0.Reference      = true;       % also export colon_reference.png: the reference video's colon with the segments (for the paper)
 S0.Show           = false;      % keep the figures open on screen
 S0.Mark           = false;      % set / edit the segment cuts first
 % ---- figure look
@@ -123,6 +124,14 @@ if ~o.Mark && ~isfile(o.Cuts)
 end
 if o.Mark
     markCuts(REC, o.Cuts);
+end
+
+if o.Reference
+    try
+        makeReference(REC, o, figDir);
+    catch err
+        fprintf(2, 'colon_reference.png not made: %s\n', err.message);
+    end
 end
 
 REC = chooseRecordings(REC, o.Recordings);
@@ -271,6 +280,110 @@ end
 end
 
 %% ======================= figure =======================
+function makeReference(REC, o, figDir)
+%MAKEREFERENCE colon_reference.png: frame of the video the cuts were set on, colon cut into its segments,
+%   white centerline, start point (anus) and end point (cecum). No tip path, no title (for the paper).
+if ~isfile(o.Cuts), error('no %s yet', o.Cuts); end
+d = jsondecode(fileread(o.Cuts));
+C = struct('cut_px', reshape(double(d.cut_px), [], 2), 'refB', reshape(double(d.ref_boundary), [], 2), ...
+    'refC', reshape(double(d.ref_centerline), [], 2));
+k = find(arrayfun(@(r) ~isempty(r.csv) && strcmp(squashName(trackBase(r.csv)), squashName(d.source)), REC), 1);
+if isempty(k), error('reference video "%s" not found', d.source); end
+files = guessTrackFiles(REC(k).csv);
+[names, short, cols] = segNames();
+
+% the reference shape itself, cuts as fractions along its centerline (anus -> cecum)
+c = resamplePolyline(C.refC, 400);
+bnd = C.refB;
+fr = zeros(1, size(C.cut_px, 1));
+for j = 1:numel(fr), fr(j) = projectToPolyline(c, C.cut_px(j, :)); end
+if fr(end) < fr(1), c = flipud(c); fr = 1 - fr; end
+edges = [0, cummax(min(max(fr, 0), 1)), 1];
+
+fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 17 9.5], 'Visible', onOff(o.Show), ...
+    'DefaultAxesFontName', o.FontName, 'DefaultTextFontName', o.FontName, 'DefaultLegendFontName', o.FontName);
+ax = axes(fig);
+hold(ax, 'on');
+im = [];
+if ~isempty(files.video)
+    vr = VideoReader(files.video);
+    vr.CurrentTime = min(double(d.frame) / vr.FrameRate, vr.Duration - 1 / vr.FrameRate);
+    im = readFrame(vr);
+    image(ax, im);
+end
+drawSegmentArea(ax, bnd, c, edges, cols, 0.45);
+for j = 2:numel(edges) - 1
+    if edges(j) > edges(j - 1) || j == 2
+        drawCut(ax, bnd, c, edges(j), '');
+    end
+end
+plot(ax, bnd([1:end 1], 1), bnd([1:end 1], 2), '-', 'Color', [0.95 0.80 0.20], 'LineWidth', 1);
+plot(ax, c(:, 1), c(:, 2), '-', 'Color', [1 1 1 0.85], 'LineWidth', 1);
+plot(ax, c(1, 1), c(1, 2), 'o', 'MarkerSize', 8, 'MarkerFaceColor', 'w', 'MarkerEdgeColor', 'k');
+plot(ax, c(end, 1), c(end, 2), 's', 'MarkerSize', 8, 'MarkerFaceColor', 'w', 'MarkerEdgeColor', 'k');
+axis(ax, 'image');
+ax.YDir = 'reverse';
+ax.XTick = []; ax.YTick = [];
+if ~isempty(im), axis(ax, [0.5 size(im, 2) + 0.5 0.5 size(im, 1) + 0.5]); end
+% segment names: drawn after the centerline so they sit on top of it; black, no box
+for j = 1:numel(edges) - 1
+    if edges(j + 1) <= edges(j), continue; end
+    q = pointAt(c, (edges(j) + edges(j + 1)) / 2);
+    text(ax, q(1), q(2), short{j}, 'Color', 'k', 'FontWeight', 'bold', 'FontSize', o.FontSize, ...
+        'HorizontalAlignment', 'center');
+end
+% start / end labels outside the colon outline (white box), kept inside the image
+endLabel(ax, bnd, c, 0.01, 'Start point', o.FontSize);
+endLabel(ax, bnd, c, 0.99, 'End point', o.FontSize);
+hl = gobjects(1, numel(names));   % legend entries only
+for j = 1:numel(names)
+    hl(j) = plot(ax, nan, nan, 's', 'MarkerSize', 9, 'MarkerFaceColor', cols(j, :), ...
+        'MarkerEdgeColor', 'none', 'DisplayName', names{j});
+end
+legend(ax, hl, 'Location', 'eastoutside', 'Box', 'off', 'FontSize', o.FontSize, 'TextColor', 'k');
+savePng(fig, fullfile(figDir, 'colon_reference.png'), 300);
+if ~o.Show, close(fig); end
+fprintf('colon_reference.png (cuts set on %s)\n', d.source);
+end
+
+function endLabel(ax, bnd, c, f, str, fs)
+%ENDLABEL Label near a centerline end, just outside the colon outline on the side away from the colon centre.
+[q, t] = pointAt(c, f);
+L = cutLine(bnd, q, t);                       % the two outline points across the colon at f
+ctr = mean(bnd, 1);
+[~, j] = max(vecnorm(L - ctr, 2, 2));
+n = L(j, :) - q;
+n = n / max(norm(n), eps);
+p = L(j, :) + 12 * n;                         % 12 px outside the outline
+if abs(n(2)) >= abs(n(1))                     % mostly up / down (image y points down)
+    if n(2) < 0, va = 'bottom'; else, va = 'top'; end
+    ha = 'center';
+else
+    if n(1) < 0, ha = 'right'; else, ha = 'left'; end
+    va = 'middle';
+end
+plot(ax, [q(1) p(1)], [q(2) p(2)], '-', 'Color', 'k', 'LineWidth', 0.8);   % thin leader line
+h = text(ax, p(1), p(2), str, 'Color', 'k', 'FontWeight', 'bold', 'FontSize', fs, 'HorizontalAlignment', ha, ...
+    'VerticalAlignment', va, 'BackgroundColor', [1 1 1 0.75], 'Margin', 1);
+% keep the label inside the axes (image): shift it back if it sticks out
+e = get(h, 'Extent');
+xl = xlim(ax); yl = ylim(ax); m = 0.01 * diff(xl);
+x1 = e(1); x2 = e(1) + e(3);
+y1 = min(e(2), e(2) + e(4)); y2 = max(e(2), e(2) + e(4));
+dx = max(0, xl(1) + m - x1) - max(0, x2 - (xl(2) - m));
+dy = max(0, yl(1) + m - y1) - max(0, y2 - (yl(2) - m));
+h.Position(1:2) = h.Position(1:2) + [dx dy];
+end
+
+function b = trackBase(csv)
+[~, b] = fileparts(csv);
+b = b(1:end - 6);                 % drop '_track'
+end
+
+function s = squashName(s)
+s = lower(regexprep(strtrim(s), '\s+', ' '));
+end
+
 function [fig, st] = makeFigure(D, TK, SG, o)
 [names, short, cols] = segNames();
 cols = 0.55 * cols + 0.45;          % lighter for backgrounds
