@@ -1,230 +1,95 @@
 test,role,video,sync,segment,t_enter_s,t_exit_s,duration_s,F_mean_N,F_max_N,P1_mean
-large size / test 1,G,Mvi 1385  L 01 G,"synced (Corrected_video)",Rectum,13.6,55.08,41.48,0.0548929610717912,0.290785800894468,6.21869237551858
-large size / test 1,G,Mvi 1385  L 01 G,"synced (Corrected_video)",Sigmoid,55.08,115.5,60.42,1.28514171195722,2.24940639042272,16.6994438691212
-large size / test 1,G,Mvi 1385  L 01 G,"synced (Corrected_video)",Descending colon,115.5,126.5,11,1.24591306496382,1.42985441731986,20.0294869975852
-large size / test 1,G,Mvi 1385  L 01 G,"synced (Corrected_video)",Splenic flexure,126.5,131.2978662,4.79786620000004,1.28942065435556,1.42892161718635,20.0537201499339
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Rectum,13.0749524,31.48,18.4050476,0.0656573132880617,0.61489956218912,7.71343217967568
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Sigmoid,31.48,50.52,19.04,1.57329501033124,2.80318838252873,20.5736221692562
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Descending colon,50.52,59.22,8.7,2.75795812427718,3.53334985698277,22.4281697189629
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Splenic flexure,59.22,65.06,5.84,1.71285668304699,1.90000551370249,22.4553417436188
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Transverse colon,65.06,94.34,29.28,1.61198837108862,1.70720099514209,23.8658450186596
-large size / test 2,G,Mvi 1387  L 02 G,"synced (Corrected_video)",Hepatic flexure,94.34,133.223012,38.883012,1.64234553210358,1.77015816048703,30.2917344371086
-large size / test 3,G,Mvi 1388  L 03 G,"synced (Corrected_video)",Rectum,36.18,48.98,12.8,0.164614182431169,1.03907362173054,10.4907424363127
-large size / test 3,G,Mvi 1388  L 03 G,"synced (Corrected_video)",Sigmoid,48.98,152.272554,103.292554,3.50181868322337,4.68021586369216,27.347756213491
-large size / test 5,G,Mvi 1390  L 05 G,"synced (Corrected_video)",Rectum,12.6,20.08,7.48,0.046326339215007,0.100224620697305,6.75877595088194
-large size / test 5,G,Mvi 1390  L 05 G,"synced (Corrected_video)",Sigmoid,20.08,21.94,1.86,0.383304325108506,0.978670107173787,15.916791758923
-large size / test 5,G,Mvi 1390  L 05 G,"synced (Corrected_video)",Descending colon,21.94,93.12,71.18,1.15195110478897,1.89039399713124,26.8198653390435
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Rectum,11.0887245,26.28,15.1912755,0.0599619339048377,0.122501593967014,2.64431402499873
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Sigmoid,26.28,104.42,78.14,1.51909081780601,2.95164605307371,17.9962714735748
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Descending colon,104.42,111.14,6.72,0.822247754503644,0.914551423318617,12.7563508968106
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Splenic flexure,111.14,113.42,2.28,0.844915457215952,0.902884927913653,16.2663718452499
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Transverse colon,113.42,130.14,16.72,1.45915675500753,3.21176673359544,23.8983295116743
-large size / test 6,G,Mvi 1391  L 06 G,"synced (Corrected_video)",Hepatic flexure,130.14,131.1679449,1.02794490000002,1.79954511090745,1.82255679069555,29.8450213496586
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Rectum,16.76,24.96,8.2,0.0803402034380253,0.304965813543057,6.58565326393727
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Sigmoid,24.96,33.22,8.26,0.985474362243168,2.73637818127151,18.0797908510356
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Descending colon,33.22,35.9,2.68,1.83537710376749,2.80286769315369,19.7502002021406
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Splenic flexure,35.9,36.58,0.68,1.34184524978378,1.36282882015461,20.629282479863
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Transverse colon,36.58,42.14,5.56,1.4397464711733,1.52867352430832,25.4701922222518
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Hepatic flexure,42.14,46.26,4.12,1.51961941522711,1.63517924551831,29.146800784147
-large size / test 7,G,Mvi 1393  L 07 G,"synced (Corrected_video)",Ascending colon,46.26,62.12,15.86,1.50510269356921,1.67406028315605,29.5256753592369
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Rectum,12.36,23.5,11.14,0.0554108776587059,0.206896392793417,5.02529419195176
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Sigmoid,23.5,40,16.5,1.62375740152257,4.47094345468525,19.1479445822458
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Descending colon,40,41.32,1.32,4.58782039623045,5.48838097875921,26.6262815131115
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Splenic flexure,41.32,42.5,1.18,2.08202314918015,2.3706364196944,29.3525695210389
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Transverse colon,42.5,49.3,6.8,2.33976375935298,2.44643988809955,29.997971267521
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Hepatic flexure,49.3,56.1,6.8,2.29056807912692,2.37575324839588,29.9937945576843
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Ascending colon,56.1,67.72,11.62,2.28592103707526,2.37834095130822,30.0913645723073
-large size / test 8,G,Mvi 1394  L 08 G,"synced (Corrected_video)",Cecum,67.72,75.36,7.64,1.96923107919787,2.25512342527021,19.7530742790306
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Cecum,424.2870935,452.7871,28.5000065,0.141158884854574,0.28828729146874,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Ascending colon,452.7871,466.2271,13.44,0.150830734920167,0.422327887397535,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Hepatic flexure,466.2271,477.0871,10.86,0.32475151772807,0.491032566359708,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Transverse colon,477.0871,484.2271,7.13999999999999,0.330831566743032,0.484602390576333,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Splenic flexure,484.2271,484.2871,0.0600000000000023,0.216322959726126,0.224259823430968,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Descending colon,484.2871,492.2671,7.98000000000002,0.609395248591733,0.929623666175179,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Sigmoid,492.2671,499.4271,7.15999999999997,0.506613774551854,0.918206253962335,NaN
-large size / test 8,R,Mvi 1395  L 08 R,"synced (Corrected_video)",Rectum,499.4271,520.2271,20.8,0.159748395895982,0.279862890780572,NaN
-Medim size / test 1,G,Mvi 1378 M 01 G,"synced (Corrected_video)",Rectum,16.76,34.44,17.68,0.0419911072544419,0.119325495980068,17.3095147827846
-Medim size / test 1,G,Mvi 1378 M 01 G,"synced (Corrected_video)",Sigmoid,34.44,72.4362953,37.9962953,0.726869655116148,1.8693445194925,30.2672451328914
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Rectum,24.19,43.27,19.08,0.0497511381700292,0.232231720517927,15.4529729285092
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Sigmoid,43.27,85.67,42.4,0.381740811819188,1.07993733426745,25.7781425731747
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Descending colon,85.67,115.87,30.2,1.72372396098314,2.73847923800697,37.3057208275004
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Splenic flexure,115.87,117.05,1.17999999999999,0.836509974514717,0.870071364325139,42.9232849055097
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Transverse colon,117.05,122.35,5.3,0.838414805395536,0.889636864683026,43.0203577779192
-Medim size / test 2,G,Mvi 1379- M 02 G,"synced (Corrected_video)",Hepatic flexure,122.35,139.3338111,16.9838111,0.80812351973605,0.89758607102277,43.0168385016829
-Medim size / test 3,G,Mvi 1381 M 03 G,"NOT synced (automatic placement, offset 0)",Rectum,151.6974617,185.1174617,33.42,NaN,NaN,-0.115506480784586
-Medim size / test 3,G,Mvi 1381 M 03 G,"NOT synced (automatic placement, offset 0)",Sigmoid,185.1174617,195.1194391,10.0019774,NaN,NaN,-0.11245260635103
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Cecum,607.9634839,612.4434839,4.48000000000002,0.0432225212482874,0.107367847417507,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Ascending colon,612.4434839,621.7034839,9.25999999999999,0.179886224928816,0.496275807172667,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Hepatic flexure,621.7034839,622.6034839,0.899999999999977,0.45723631724532,0.505155075946499,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Transverse colon,622.6034839,625.9034839,3.30000000000007,0.495004313349446,0.547705806756248,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Splenic flexure,625.9034839,629.0034839,3.09999999999991,0.424312290467229,0.494913697855507,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Descending colon,629.0034839,631.2234839,2.22000000000003,0.36153892566189,0.447050446759168,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Sigmoid,631.2234839,635.6234839,4.39999999999998,0.256536293450034,0.37339836129915,NaN
-Medim size / test 3,R,Mvi 1382  M 03 R,"NOT synced (automatic placement, offset 0)",Rectum,635.6234839,644.7434839,9.12,0.1846664311546,0.271935063855472,NaN
-Medim size / test 4,G,Mvi 1383  M 04 G,"synced (Corrected_video)",Rectum,17.72,37.06,19.34,0.131901731247025,0.467082770713356,13.7674580280113
-Medim size / test 4,G,Mvi 1383  M 04 G,"synced (Corrected_video)",Sigmoid,37.06,131.1792943,94.1192943000001,0.810795265574741,2.2400259629516,35.0085108683114
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Rectum,17.96,28.34,10.38,0.176963729638487,1.06016562546329,19.9307437076472
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Sigmoid,28.34,52.36,24.02,0.943667591906711,1.6824343374276,32.6769159830738
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Descending colon,52.36,77.82,25.46,1.59197670860918,2.05438019428787,37.8113673258029
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Splenic flexure,77.82,108.96,31.14,1.11774282135194,1.20591088896036,46.5633657397948
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Transverse colon,108.96,131.64,22.68,0.933387309730191,1.15813837115748,50.0263744778964
-Medim size / test 5,G,Mvi 1384  M 05 G,"synced (Corrected_video)",Hepatic flexure,131.64,134.6720072,3.03200720000001,0.816416587488572,0.858601585060997,49.9688675331989
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Rectum,20.8513887,41.5,20.6486113,0.0486473040464019,0.185303207389761,12.527165787866
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Sigmoid,41.5,58.26,16.76,0.596623201308245,0.794565988116491,31.2973542063482
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Descending colon,58.26,92.22,33.96,0.187510197904874,0.623580532064987,38.4765359817418
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Splenic flexure,92.22,98.34,6.12,0.103879868064461,0.20922481378565,40.9859674008514
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Transverse colon,98.34,117.2,18.86,0.111994584087764,0.17392175083967,42.4084140056131
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Hepatic flexure,117.2,122.78,5.58,0.086026173184131,0.145198536130805,44.2319773615323
-Medim size / test 6,G,Mvi 1427 M 06 G,"synced (Corrected_video)",Ascending colon,122.78,140.990015,18.210015,0.0829594486160174,0.151961045544821,45.2232380330882
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Ascending colon,316.9306192,322.8706,5.9399808,0.0590432091788249,0.115625858717701,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Hepatic flexure,322.8706,323.0506,0.17999999999995,0.0579828616312882,0.0724489977604614,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Transverse colon,323.0506,327.2106,4.16000000000003,0.0504873050196336,0.09328811573582,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Splenic flexure,327.2106,329.1506,1.94,0.0924847751361643,0.135406059877671,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Descending colon,329.1506,335.3906,6.24000000000001,0.0688312792181887,0.133488345562423,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Sigmoid,335.3906,339.1906,3.80000000000001,0.195441323247557,0.357877306508029,NaN
-Medim size / test 6,R,Mvi 1430 M 06 R,"synced (Corrected_video)",Rectum,339.1906,349.2706,10.08,0.0635164228633159,0.136092418720226,NaN
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Rectum,15.68,23.92,8.24,0.0410910588633532,0.0984416345893607,7.1300353526576
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Sigmoid,23.92,44.88,20.96,1.39356115485361,1.99741018956481,36.8469287729312
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Descending colon,44.88,50.42,5.54,1.22510967729415,2.63346081490607,40.4270042760207
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Splenic flexure,50.42,55.38,4.96,0.405611500364484,0.447802544719197,40.5738260388743
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Transverse colon,55.38,91.52,36.14,0.356092158539831,0.488106884993646,41.4329429674899
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Hepatic flexure,91.52,94.58,3.06,0.422968108560739,0.470095157089845,39.0820848209033
-Medim size / test 7,G,Mvi 1429 M 07 G,"synced (Corrected_video)",Ascending colon,94.58,133.8211349,39.2411349,0.472530311550479,0.602335154658524,43.5810719730741
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Cecum,237.7310749,243.7311,6.00002509999999,0.0433118400936226,0.107502234625132,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Ascending colon,243.7311,248.5711,4.84,0.115052557227474,0.181011321884113,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Hepatic flexure,248.5711,252.4911,3.91999999999999,0.108874011927529,0.173089796723354,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Transverse colon,252.4911,259.2111,6.72,0.245358374148868,0.335229007950645,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Splenic flexure,259.2111,260.1111,0.900000000000034,0.288863591899343,0.321536963897351,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Descending colon,260.1111,264.4711,4.35999999999996,0.317501536844112,0.403553559294516,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Sigmoid,264.4711,267.8311,3.36000000000001,0.370406237307383,0.526374107608548,NaN
-Medim size / test 7,R,Mvi 1432 M 07 R,"synced (Corrected_video)",Rectum,267.8311,275.5511,7.72000000000003,0.158131655337563,0.501035156807731,NaN
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Rectum,9.48,29.2,19.72,0.0531395768572108,0.178922442947647,12.730332913297
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Sigmoid,29.2,69.3,40.1,0.422712268786607,0.869173158862003,25.3924827153186
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Descending colon,69.3,178.94,109.64,0.494266931504627,0.935298341968761,34.6525992735696
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Splenic flexure,178.94,183.8,4.86000000000001,0.278772395074799,0.34666095106846,37.0980335754072
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Transverse colon,183.8,187.66,3.85999999999999,0.326470645339313,0.415464924068546,40.1185921115083
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Hepatic flexure,187.66,191.28,3.62,0.361600748001665,0.421624282192894,43.5494561689618
-Medim size / test 8,G,Mvi 1431 M 08 G,"synced (Corrected_video)",Ascending colon,191.28,225.74,34.46,0.410409526721201,0.774336841309548,35.2589183590603
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Rectum,19.6,33.32,13.72,0.0413932205295212,0.109350810296683,11.9769761625314
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Sigmoid,33.32,47.14,13.82,0.316287259175806,0.412324331871468,24.2891149465417
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Descending colon,47.14,107.18,60.04,0.278945267812879,0.403847468208175,27.3659513741381
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Splenic flexure,107.18,107.92,0.739999999999981,0.22225173485472,0.298219172440933,35.7415741598483
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Transverse colon,107.92,109.94,2.02000000000001,0.158801981914987,0.201732346522538,35.9166280999106
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Hepatic flexure,109.94,111.36,1.41999999999999,0.163039012381843,0.189324498468755,36.1339121081444
-Medim size / test 9,G,Mvi 1433 M 09 G,"synced (Corrected_video)",Ascending colon,111.36,132.04,20.68,0.211828306163043,0.27915508268138,43.1646570331354
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Rectum,7.2,17.86,10.66,0.11000744268966,0.372581518848294,NaN
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Sigmoid,17.86,25.3,7.44,0.311199460611353,0.594444886746398,NaN
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Descending colon,25.3,65.08,39.78,0.568492960513841,2.19295647543901,NaN
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Splenic flexure,65.08,77.46,12.38,0.431535738590588,1.15847983356322,NaN
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Transverse colon,77.46,154.14,76.68,0.340494290259482,1.14881862605638,NaN
-Mo / test 1,G,Mvi 1411 Mo 01 G,"synced (Corrected_video)",Hepatic flexure,154.14,178.8,24.66,0.362598543200593,0.811778439953945,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Hepatic flexure,350.9953,367.4153,16.42,0.0609525161722247,0.158184195917089,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Transverse colon,367.4153,381.2753,13.86,0.116613402792334,0.205256634033951,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Splenic flexure,381.2753,391.2953,10.02,0.206196832398067,0.421366162503671,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Descending colon,391.2953,407.3153,16.02,0.257941123880138,0.437509516470999,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Sigmoid,407.3153,416.6353,9.31999999999999,0.0973767032179839,0.224267258101415,NaN
-Mo / test 1,R,Mvi 1412 Mo 01 R,"synced (Corrected_video)",Rectum,416.6353,438.3353,21.7,0.0602801942813965,0.11232145640854,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Rectum,0.32,12.32,12,0.0465994738544377,0.123839738515177,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Sigmoid,12.32,29.62,17.3,0.175201879287252,0.434220391079442,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Descending colon,29.62,52.12,22.5,0.16359903792848,0.596972861226573,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Splenic flexure,52.12,94.5,42.38,0.0954258375109373,0.245152844566698,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Transverse colon,94.5,182.42,87.92,0.0809674072845983,0.375124111484887,NaN
-Mo / test 2,G,Mvi 1413 Mo 02 G,"synced (Corrected_video)",Hepatic flexure,182.42,209.42,27,0.145889019352976,0.514761079125591,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Hepatic flexure,310.9608322,311.0508,0.089967799999954,0.0272747333152802,0.0331968997413389,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Transverse colon,311.0508,325.3108,14.26,0.0721030567447529,0.198315337097125,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Splenic flexure,325.3108,335.3908,10.08,0.0960483731015191,0.215894894754388,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Descending colon,335.3908,347.8708,12.48,0.145628371705679,0.258460105217752,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Sigmoid,347.8708,362.4108,14.54,0.240513808879569,0.55096945493819,NaN
-Mo / test 2,R,Mvi 1414 Mo 02 R,"synced (Corrected_video)",Rectum,362.4108,385.7508,23.34,0.0784172644257357,0.205165919588513,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Rectum,0,13.62,13.62,0.126243494111343,0.478870875991974,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Sigmoid,13.62,28.52,14.9,0.311201169155438,1.11294933757436,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Descending colon,28.52,46.84,18.32,0.296539823612072,0.95292818595569,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Splenic flexure,46.84,67.52,20.68,0.450773903624214,0.773505952228383,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Transverse colon,67.52,99.78,32.26,0.339094739187553,0.768975949190866,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Hepatic flexure,99.78,119.42,19.64,0.507479833580273,0.860971618341049,NaN
-Mo / test 3,G,Mvi 1415 Mo 03 G,"synced (Corrected_video)",Ascending colon,119.42,152.18,32.76,0.468922628316405,0.886711848148756,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Ascending colon,380.9534425,395.1534,14.1999575,0.243811551098818,0.483733137750813,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Hepatic flexure,395.1534,401.5934,6.44,0.325598084888445,0.443806290027587,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Transverse colon,401.5934,418.4534,16.86,0.298751282224321,0.439249921634923,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Splenic flexure,418.4534,435.2934,16.84,0.361340073966844,0.679718009241817,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Descending colon,435.2934,445.2934,10,0.375001501465569,0.558818873045616,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Sigmoid,445.2934,464.2134,18.92,0.356596335184429,0.636155813575953,NaN
-Mo / test 3,R,Mvi 1416 Mo 03 R,"synced (Corrected_video)",Rectum,464.2134,491.8534,27.64,0.14035501979008,0.26822163707923,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Rectum,3.16,17.42,14.26,0.0519634836301765,0.155009450316747,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Sigmoid,17.42,38.12,20.7,0.300860263411258,0.846745492865182,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Descending colon,38.12,49.2,11.08,0.16412929081677,0.478829750211388,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Splenic flexure,49.2,63.92,14.72,0.159354818895361,0.504049035003044,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Transverse colon,63.92,79.36,15.44,0.225146233237967,0.710705937563138,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Hepatic flexure,79.36,90.26,10.9,0.428488614324119,0.921020048472073,NaN
-Mo / test 4,G,Mvi 1417 Mo 04 G,"synced (Corrected_video)",Ascending colon,90.26,115.7,25.44,0.52857824621491,1.48410846291216,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Cecum,303.9712043,309.7312,5.75999569999999,0.0752605952631698,0.172753131649862,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Ascending colon,309.7312,323.0712,13.34,0.08971776617743,0.233902353903293,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Hepatic flexure,323.0712,328.2312,5.16000000000003,0.133614592428115,0.178527913569296,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Transverse colon,328.2312,347.6712,19.44,0.204035295284694,0.361253321029928,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Splenic flexure,347.6712,361.6912,14.02,0.220702949074051,0.449174721249003,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Descending colon,361.6912,374.0512,12.36,0.333769945723971,0.468193922703765,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Sigmoid,374.0512,387.2912,13.24,0.299673306590456,0.71421340462916,NaN
-Mo / test 4,R,Mvi 1418 Mo 04 R,"synced (Corrected_video)",Rectum,387.2912,404.118195,16.826995,0.168411391698336,0.424132159755988,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Rectum,0,17.62,17.62,0.141456733944077,0.481628854376003,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Sigmoid,17.62,46.36,28.74,0.375928050799377,0.867246301581173,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Descending colon,46.36,65.62,19.26,0.168468503044098,0.547201725009286,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Splenic flexure,65.62,80.24,14.62,0.198290370690877,0.496137442245588,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Transverse colon,80.24,95.68,15.44,0.220040880090049,0.429898178528967,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Hepatic flexure,95.68,107.88,12.2,0.509790682942773,1.50477186637325,NaN
-Mo / test 5,G,Mvi 1419 Mo 05 G,"synced (Corrected_video)",Ascending colon,107.88,129.54,21.66,0.125177367724234,1.16818424026827,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Rectum,0,20.24,20.24,0.0990850371373411,0.454560954521682,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Sigmoid,20.24,34.96,14.72,0.416996295274708,0.959020802418228,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Descending colon,34.96,56.22,21.26,0.433639781652574,1.31642021000597,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Splenic flexure,56.22,62.38,6.16,0.499153386439184,1.14785110938317,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Transverse colon,62.38,80.46,18.08,0.426962967824103,1.70722654816884,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Hepatic flexure,80.46,93.28,12.82,0.627295520209625,1.66838205374209,NaN
-Mo / test 6,G,Mvi 1421 Mo 06 G,"synced (Corrected_video)",Ascending colon,93.28,114.54,21.26,0.71849964686849,2.33249854681616,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Rectum,5.08,20.82,15.74,0.134610361462995,0.440832576667954,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Sigmoid,20.82,30.16,9.34,0.235990794798105,0.524244357219808,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Descending colon,30.16,69.58,39.42,0.286761148988277,0.931137348333436,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Splenic flexure,69.58,75.9,6.32000000000001,0.324984664602527,0.691727697006237,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Transverse colon,75.9,101.84,25.94,0.51146530456339,1.59805998286355,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Hepatic flexure,101.84,117.02,15.18,0.558227526026002,1.39801527923539,NaN
-Mo / test 7,G,Mvi 1423 Mo 07 G,"synced (Corrected_video)",Ascending colon,117.02,120.1192436,3.09924360000001,0.570493260782107,0.771562220068565,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Ascending colon,159.9645953,166.2246,6.26000470000002,0.0754069292539246,0.166482852137406,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Hepatic flexure,166.2246,173.0646,6.84,0.118180329099773,0.225005296447216,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Transverse colon,173.0646,190.2646,17.2,0.112156225184019,0.274950294696691,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Splenic flexure,190.2646,192.6846,2.41999999999999,0.194382738364879,0.315402582506531,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Descending colon,192.6846,199.4846,6.80000000000001,0.112082330892049,0.217098597646282,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Sigmoid,199.4846,206.2846,6.80000000000001,0.182680173304626,0.515447395926541,NaN
-Mo / test 7,R,Mvi 1424 Mo 07 R,"synced (Corrected_video)",Rectum,206.2846,222.3446,16.06,0.139411589521648,0.202881040914701,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Rectum,0,10.32,10.32,0.0881197431015661,0.341367796530915,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Sigmoid,10.32,35.16,24.84,0.18927983761398,0.462383936549801,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Descending colon,35.16,58.66,23.5,0.565112707696674,1.42904186704496,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Splenic flexure,58.66,65.7,7.04000000000001,0.296693832963359,0.699887085655775,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Transverse colon,65.7,110.98,45.28,0.693082803080526,2.06210460423403,NaN
-Mo / test 8,G,Mvi 1425 Mo 08 G,"synced (Corrected_video)",Hepatic flexure,110.98,120.2168595,9.23685949999999,0.562438360610124,1.07375708764382,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Ascending colon,429.0265059,438.5265,9.49999410000004,0.120881275619558,0.246477509057765,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Hepatic flexure,438.5265,456.1865,17.66,0.0737965053977184,0.145054275998773,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Transverse colon,456.1865,468.2265,12.04,0.0861443067168795,0.159489667632747,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Splenic flexure,468.2265,474.2665,6.04000000000002,0.0789497309761958,0.174276424334728,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Descending colon,474.2665,480.6665,6.39999999999998,0.175900941208815,0.292679074559702,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Sigmoid,480.6665,487.8665,7.19999999999999,0.22947416189763,0.3539063067725,NaN
-Mo / test 8,R,Mvi 1426 Mo 08 R,"synced (Corrected_video)",Rectum,487.8665,505.7665,17.9,0.0902460107174232,0.293781995214456,NaN
-small size / test 1,G,Mvi 1396  S 01 G,"synced (Corrected_video)",Rectum,37,70.94,33.94,0.0822084636584296,0.365312583424362,54.4084341350132
-small size / test 1,G,Mvi 1396  S 01 G,"synced (Corrected_video)",Sigmoid,70.94,152.3747879,81.4347879,0.316194236867085,0.684992785122041,84.9401853340305
-small size / test 1,R,Mvi 1397  S 01 R,"synced (Corrected_video)",Sigmoid,635.012,665.552,30.5400000000001,0.262345544982651,0.53588098425157,NaN
-small size / test 1,R,Mvi 1397  S 01 R,"synced (Corrected_video)",Rectum,665.552,672.352,6.79999999999995,0.0922252811650684,0.414492746791417,NaN
-small size / test 2,G,Mvi 1398  S 02 G,"synced (Corrected_video)",Rectum,0,15.12,15.12,0.0526060260034015,0.432809261058721,NaN
-small size / test 2,G,Mvi 1398  S 02 G,"synced (Corrected_video)",Sigmoid,15.12,24.66,9.54,0.337892620343126,0.665199920811402,NaN
-small size / test 2,G,Mvi 1398  S 02 G,"synced (Corrected_video)",Descending colon,24.66,49.54,24.88,0.127864666321139,0.326379926555228,NaN
-small size / test 2,G,Mvi 1398  S 02 G,"synced (Corrected_video)",Splenic flexure,49.54,76.9,27.36,0.0938063599607641,0.15641688939968,NaN
-small size / test 3,G,Mvi 1399  S 03 G,"synced (Corrected_video)",Rectum,14.56,28.48,13.92,0.0705548829973812,0.16334240180603,54.0400787716939
-small size / test 3,G,Mvi 1399  S 03 G,"synced (Corrected_video)",Sigmoid,28.48,66.2,37.72,0.0989529180859182,0.229492276863608,81.953471596922
-small size / test 3,G,Mvi 1399  S 03 G,"synced (Corrected_video)",Descending colon,66.2,187.2834809,121.0834809,0.166653381151467,0.257545846471613,87.4152456335875
-small size / test 4,G,Mvi 1400  S 04 G,"synced (Corrected_video)",Rectum,22.16,48.08,25.92,0.120908445501123,0.564408738011205,75.1457236513986
-small size / test 4,G,Mvi 1400  S 04 G,"synced (Corrected_video)",Sigmoid,48.08,79.22,31.14,0.715242127753548,0.835805609365509,79.4348578971752
-small size / test 4,G,Mvi 1400  S 04 G,"synced (Corrected_video)",Descending colon,79.22,128.8969381,49.6769381,0.848504501521754,0.936574084975048,88.8159702155486
-small size / test 5,G,Mvi 1402  S 05 G,"synced (Corrected_video)",Rectum,23.99,36.17,12.18,0.0907494550537801,0.21341513653409,72.091429368198
-small size / test 5,G,Mvi 1402  S 05 G,"synced (Corrected_video)",Sigmoid,36.17,125.6925311,89.5225311,0.44668064815787,0.699587790615961,72.434304836136
-small size / test 6,G,Mvi 1405  S 06 G,"synced (Corrected_video)",Rectum,23.37,45.57,22.2,0.063385424831595,0.294469658630396,72.195595303633
-small size / test 6,G,Mvi 1405  S 06 G,"synced (Corrected_video)",Sigmoid,45.57,128.4903701,82.9203701,0.362406952046792,0.48415814759234,68.7992682124217
-small size / test 7,G,Mvi 1406  S 07 G,"synced (Corrected_video)",Rectum,13.12,58.24,45.12,0.169927638517458,0.942176398753661,40.3870308699145
-small size / test 7,G,Mvi 1406  S 07 G,"synced (Corrected_video)",Sigmoid,58.24,101.78167,43.54167,0.814789776670202,0.954029558989798,73.8775601141362
-small size / test 8,G,Mvi 1407  S 08 G,"synced (Corrected_video)",Rectum,46,66.72,20.72,0.0916988659204419,0.366985906854092,79.7479974806401
-small size / test 8,G,Mvi 1407  S 08 G,"synced (Corrected_video)",Sigmoid,66.72,112.3560999,45.6360999,0.433560584291339,0.750196213206158,62.0735948085381
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Rectum,7.2,17.86,10.66,0.11000744268966,0.372581518848294,NaN
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Sigmoid,17.86,25.3,7.44,0.311199460611353,0.594444886746398,NaN
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Descending colon,25.3,65.08,39.78,0.568492960513841,2.19295647543901,NaN
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Splenic flexure,65.08,77.46,12.38,0.431535738590588,1.15847983356322,NaN
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Transverse colon,77.46,154.14,76.68,0.340494290259482,1.14881862605638,NaN
+Mo / test 1,G,Mvi 1411 Mo 01 G,synced (Corrected_video),Hepatic flexure,154.14,178.8,24.66,0.362598543200593,0.811778439953945,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Hepatic flexure,350.9953,367.4153,16.42,0.0609525161722247,0.158184195917089,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Transverse colon,367.4153,381.2753,13.86,0.116613402792334,0.205256634033951,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Splenic flexure,381.2753,391.2953,10.02,0.206196832398067,0.421366162503671,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Descending colon,391.2953,407.3153,16.02,0.257941123880138,0.437509516470999,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Sigmoid,407.3153,416.6353,9.31999999999999,0.0973767032179839,0.224267258101415,NaN
+Mo / test 1,R,Mvi 1412 Mo 01 R,synced (Corrected_video),Rectum,416.6353,438.3353,21.7,0.0602801942813965,0.11232145640854,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Rectum,0.32,12.32,12,0.0465994738544377,0.123839738515177,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Sigmoid,12.32,29.62,17.3,0.175201879287252,0.434220391079442,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Descending colon,29.62,52.12,22.5,0.16359903792848,0.596972861226573,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Splenic flexure,52.12,94.5,42.38,0.0954258375109373,0.245152844566698,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Transverse colon,94.5,182.42,87.92,0.0809674072845983,0.375124111484887,NaN
+Mo / test 2,G,Mvi 1413 Mo 02 G,synced (Corrected_video),Hepatic flexure,182.42,209.42,27,0.145889019352976,0.514761079125591,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Hepatic flexure,310.9608322,311.0508,0.089967799999954,0.0272747333152802,0.0331968997413389,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Transverse colon,311.0508,325.3108,14.26,0.0721030567447529,0.198315337097125,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Splenic flexure,325.3108,335.3908,10.08,0.0960483731015191,0.215894894754388,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Descending colon,335.3908,347.8708,12.48,0.145628371705679,0.258460105217752,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Sigmoid,347.8708,362.4108,14.54,0.240513808879569,0.55096945493819,NaN
+Mo / test 2,R,Mvi 1414 Mo 02 R,synced (Corrected_video),Rectum,362.4108,385.7508,23.34,0.0784172644257357,0.205165919588513,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Rectum,0,13.62,13.62,0.126243494111343,0.478870875991974,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Sigmoid,13.62,28.52,14.9,0.311201169155438,1.11294933757436,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Descending colon,28.52,46.84,18.32,0.296539823612072,0.95292818595569,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Splenic flexure,46.84,67.52,20.68,0.450773903624214,0.773505952228383,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Transverse colon,67.52,99.78,32.26,0.339094739187553,0.768975949190866,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Hepatic flexure,99.78,119.42,19.64,0.507479833580273,0.860971618341049,NaN
+Mo / test 3,G,Mvi 1415 Mo 03 G,synced (Corrected_video),Ascending colon,119.42,152.18,32.76,0.468922628316405,0.886711848148756,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Ascending colon,380.9534425,395.1534,14.1999575,0.243811551098818,0.483733137750813,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Hepatic flexure,395.1534,401.5934,6.44,0.325598084888445,0.443806290027587,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Transverse colon,401.5934,418.4534,16.86,0.298751282224321,0.439249921634923,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Splenic flexure,418.4534,435.2934,16.84,0.361340073966844,0.679718009241817,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Descending colon,435.2934,445.2934,10,0.375001501465569,0.558818873045616,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Sigmoid,445.2934,464.2134,18.92,0.356596335184429,0.636155813575953,NaN
+Mo / test 3,R,Mvi 1416 Mo 03 R,synced (Corrected_video),Rectum,464.2134,491.8534,27.64,0.14035501979008,0.26822163707923,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Rectum,3.16,17.42,14.26,0.0519634836301765,0.155009450316747,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Sigmoid,17.42,38.12,20.7,0.300860263411258,0.846745492865182,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Descending colon,38.12,49.2,11.08,0.16412929081677,0.478829750211388,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Splenic flexure,49.2,63.92,14.72,0.159354818895361,0.504049035003044,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Transverse colon,63.92,79.36,15.44,0.225146233237967,0.710705937563138,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Hepatic flexure,79.36,90.26,10.9,0.428488614324119,0.921020048472073,NaN
+Mo / test 4,G,Mvi 1417 Mo 04 G,synced (Corrected_video),Ascending colon,90.26,115.7,25.44,0.52857824621491,1.48410846291216,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Cecum,303.9712043,309.7312,5.75999569999999,0.0752605952631698,0.172753131649862,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Ascending colon,309.7312,323.0712,13.34,0.08971776617743,0.233902353903293,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Hepatic flexure,323.0712,328.2312,5.16000000000003,0.133614592428115,0.178527913569296,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Transverse colon,328.2312,347.6712,19.44,0.204035295284694,0.361253321029928,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Splenic flexure,347.6712,361.6912,14.02,0.220702949074051,0.449174721249003,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Descending colon,361.6912,374.0512,12.36,0.333769945723971,0.468193922703765,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Sigmoid,374.0512,387.2912,13.24,0.299673306590456,0.71421340462916,NaN
+Mo / test 4,R,Mvi 1418 Mo 04 R,synced (Corrected_video),Rectum,387.2912,404.118195,16.826995,0.168411391698336,0.424132159755988,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Rectum,0,17.62,17.62,0.141456733944077,0.481628854376003,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Sigmoid,17.62,46.36,28.74,0.375928050799377,0.867246301581173,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Descending colon,46.36,65.62,19.26,0.168468503044098,0.547201725009286,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Splenic flexure,65.62,80.24,14.62,0.198290370690877,0.496137442245588,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Transverse colon,80.24,95.68,15.44,0.220040880090049,0.429898178528967,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Hepatic flexure,95.68,107.88,12.2,0.509790682942773,1.50477186637325,NaN
+Mo / test 5,G,Mvi 1419 Mo 05 G,synced (Corrected_video),Ascending colon,107.88,129.54,21.66,0.125177367724234,1.16818424026827,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Rectum,0,20.24,20.24,0.0990850371373411,0.454560954521682,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Sigmoid,20.24,34.96,14.72,0.416996295274708,0.959020802418228,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Descending colon,34.96,56.22,21.26,0.433639781652574,1.31642021000597,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Splenic flexure,56.22,62.38,6.16,0.499153386439184,1.14785110938317,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Transverse colon,62.38,80.46,18.08,0.426962967824103,1.70722654816884,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Hepatic flexure,80.46,93.28,12.82,0.627295520209625,1.66838205374209,NaN
+Mo / test 6,G,Mvi 1421 Mo 06 G,synced (Corrected_video),Ascending colon,93.28,114.54,21.26,0.71849964686849,2.33249854681616,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Rectum,5.08,20.82,15.74,0.134610361462995,0.440832576667954,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Sigmoid,20.82,30.16,9.34,0.235990794798105,0.524244357219808,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Descending colon,30.16,69.58,39.42,0.286761148988277,0.931137348333436,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Splenic flexure,69.58,75.9,6.32000000000001,0.324984664602527,0.691727697006237,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Transverse colon,75.9,101.84,25.94,0.51146530456339,1.59805998286355,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Hepatic flexure,101.84,117.02,15.18,0.558227526026002,1.39801527923539,NaN
+Mo / test 7,G,Mvi 1423 Mo 07 G,synced (Corrected_video),Ascending colon,117.02,120.1192436,3.09924360000001,0.570493260782107,0.771562220068565,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Ascending colon,159.9645953,166.2246,6.26000470000002,0.0754069292539246,0.166482852137406,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Hepatic flexure,166.2246,173.0646,6.84,0.118180329099773,0.225005296447216,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Transverse colon,173.0646,190.2646,17.2,0.112156225184019,0.274950294696691,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Splenic flexure,190.2646,192.6846,2.41999999999999,0.194382738364879,0.315402582506531,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Descending colon,192.6846,199.4846,6.80000000000001,0.112082330892049,0.217098597646282,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Sigmoid,199.4846,206.2846,6.80000000000001,0.182680173304626,0.515447395926541,NaN
+Mo / test 7,R,Mvi 1424 Mo 07 R,synced (Corrected_video),Rectum,206.2846,222.3446,16.06,0.139411589521648,0.202881040914701,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Rectum,0,10.32,10.32,0.0881197431015661,0.341367796530915,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Sigmoid,10.32,35.16,24.84,0.18927983761398,0.462383936549801,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Descending colon,35.16,58.66,23.5,0.565112707696674,1.42904186704496,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Splenic flexure,58.66,65.7,7.04000000000001,0.296693832963359,0.699887085655775,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Transverse colon,65.7,110.98,45.28,0.693082803080526,2.06210460423403,NaN
+Mo / test 8,G,Mvi 1425 Mo 08 G,synced (Corrected_video),Hepatic flexure,110.98,120.2168595,9.23685949999999,0.562438360610124,1.07375708764382,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Ascending colon,429.0265059,438.5265,9.49999410000004,0.120881275619558,0.246477509057765,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Hepatic flexure,438.5265,456.1865,17.66,0.0737965053977184,0.145054275998773,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Transverse colon,456.1865,468.2265,12.04,0.0861443067168795,0.159489667632747,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Splenic flexure,468.2265,474.2665,6.04000000000002,0.0789497309761958,0.174276424334728,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Descending colon,474.2665,480.6665,6.39999999999998,0.175900941208815,0.292679074559702,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Sigmoid,480.6665,487.8665,7.19999999999999,0.22947416189763,0.3539063067725,NaN
+Mo / test 8,R,Mvi 1426 Mo 08 R,synced (Corrected_video),Rectum,487.8665,505.7665,17.9,0.0902460107174232,0.293781995214456,NaN

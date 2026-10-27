@@ -17,7 +17,7 @@ function S = image_output(varargin)
 here = fileparts(mfilename('fullpath'));
 S0 = struct();
 % ---- what to export
-S0.Recordings     = 'all';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
+S0.Recordings     = 'Mo /';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
 S0.Silhouette     = true;       % also export <recording>_colon.png (slower; false = only the curve figures)
 S0.Show           = false;      % keep the figures open on screen
 S0.Mark           = false;      % set / edit the segment cuts first
@@ -309,6 +309,8 @@ if hasP && ~isR, spans{3} = [tP(1), tP(end)]; end
 [tLo, tHi, used] = overlapWindow(spans);
 hasF = used(2);
 hasPw = hasP && ~isR && used(3);
+noP = ~hasPw;                     % no pressure in this window (retraction, Mo without a pressure record,
+                                  % or no overlap): the pressure panel is left out
 % the figure starts at 0 s: shift every record by the start of the window
 t0 = tLo;
 tF = tF - t0; tT = tT - t0;
@@ -317,9 +319,9 @@ tLo = 0; tHi = tHi - t0;
 inF = tF >= tLo & tF <= tHi;
 bands = segmentBands(tT, SG.lab, tLo, tHi);
 
-nPan = 3 - isR;
+nPan = 3 - noP;
 figSize = o.FigSize;
-if isR, figSize(2) = o.FigSize(2) * 0.7; end   % same panel height with one panel less
+if noP, figSize(2) = o.FigSize(2) * 0.7; end   % same panel height with one panel less
 fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 figSize], 'Visible', onOff(o.Show), ...
     'DefaultAxesFontName', o.FontName, 'DefaultTextFontName', o.FontName, ...
     'DefaultAxesFontSize', o.FontSize, 'DefaultLegendFontName', o.FontName);
@@ -337,7 +339,7 @@ else
         'HorizontalAlignment', 'center', 'Color', 'k', 'FontSize', o.FontSize - 1);
 end
 
-if ~isR
+if ~noP
 ax(2) = nexttile(tl);
 if hasPw
     plot(ax(2), tP, P1, '-', 'Color', [0.49 0.18 0.56], 'LineWidth', 1.1, 'DisplayName', 'P1');
@@ -368,7 +370,7 @@ else
     setYRange(ax(3), pos(tT >= tLo & tT <= tHi), 0.05);
 end
 
-if isR, ax = ax([1 3]); end       % the panels that exist, top to bottom
+if noP, ax = ax([1 3]); end       % the panels that exist, top to bottom
 linkaxes(ax, 'x');
 xlim(ax(1), [tLo tHi]);
 for a = ax
