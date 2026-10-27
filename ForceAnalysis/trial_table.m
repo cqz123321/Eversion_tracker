@@ -22,7 +22,7 @@ function T = trial_table(varargin)
 %     Notes                 anything that makes a value missing or less reliable
 %
 %   Go force / pressure values use the same time window as the go figure of
-%   image_output (overlap of force, pressure and video track); "in the
+%   image_output (overlap of video, force and pressure); "in the
 %   sigmoid" = the sigmoid band of that figure. Positions and times use the
 %   whole video track.
 %
@@ -110,11 +110,13 @@ for fi = 1:numel(folders)
             i1 = find(ps >= pmax - o.ReachTol, 1);
             if ~isempty(i0) && ~isempty(i1) && i1 >= i0, tReach = TK.t(i1) - TK.t(i0); end
         end
-        tLo = max(spans(:, 1)); tHi = min(spans(:, 2));
-        if ~(tHi > tLo)
-            notes{end + 1} = 'force / pressure / video do not overlap'; %#ok<AGROW>
-            tLo = min(tF); tHi = max(tF);
-        end
+        % same window as the go figure of image_output: overlap of video, force and pressure;
+        % a record that does not overlap at all is left out
+        if isempty(gRec), sp = {[min(tF), max(tF)]}; else, sp = {[TK.t(1), TK.t(end)], [min(tF), max(tF)]}; end
+        if hasP, sp{end + 1} = [tP(1), tP(end)]; end
+        [tLo, tHi, used] = overlapWindow(sp);
+        if ~isempty(gRec) && ~used(2), notes{end + 1} = 'force does not overlap the go video'; end %#ok<AGROW>
+        if hasP && ~used(numel(sp)), notes{end + 1} = 'pressure does not overlap'; hasP = false; end %#ok<AGROW>
         Fmax = maxIn(tF, Fm, tLo, tHi);
         Pmax = nan;
         if hasP, Pmax = maxIn(tP, P1, tLo, tHi); end
@@ -216,6 +218,22 @@ for k = idx(:)'
     Fm = [Fm; vecnorm(Fk, 2, 2); nan];        %#ok<AGROW>
 end
 if isempty(tF), error('no force file for this phase'); end
+end
+
+function [lo, hi, used] = overlapWindow(spans)
+%OVERLAPWINDOW Intersection of time spans {[t0 t1], ...}, starting from the first (the video track).
+%   A span that does not overlap the current window is skipped (used = false) instead of emptying it.
+lo = spans{1}(1); hi = spans{1}(2);
+used = true(1, 3);
+used(numel(spans) + 1:end) = false;
+for k = 2:numel(spans)
+    a = max(lo, spans{k}(1)); b = min(hi, spans{k}(2));
+    if b > a
+        lo = a; hi = b;
+    else
+        used(k) = false;
+    end
+end
 end
 
 function v = maxIn(t, y, t1, t2)

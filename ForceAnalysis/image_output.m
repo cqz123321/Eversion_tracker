@@ -11,9 +11,13 @@ function S = image_output(varargin)
 %     1. |F| = sqrt(Fx^2 + Fy^2 + Fz^2)  (N)
 %     2. Pressure P1
 %     3. Tip position along the colon (m), 0 = anus, ColonLength = cecum
-%   The x range is the overlap of force, pressure and video track, so a record
-%   that stops early truncates the figure. The same segment bands are drawn in
-%   all three panels; panel 3 also shows the cut positions as dashed lines.
+%   The x range is the overlap of video track, force and pressure: the shortest
+%   record decides each end (start and end may come from different records).
+%   A record that does not overlap at all (e.g. the pressure of a retraction
+%   video: the pressure record covers the go phase only) is left out and its
+%   panel says so, instead of the figure being skipped.
+%   The same segment bands are drawn in all three panels; panel 3 also shows
+%   the cut positions as dashed lines.
 %
 %   Silhouette (<recording>_colon.png): first tracked video frame with the
 %   colon cut into its segments, the cut lines, the centerline (anus and cecum
@@ -135,12 +139,12 @@ for r = 1:numel(REC)
         base = fileName(D.label, TK);
 
         [fig, st] = makeFigure(D, TK, SG, o);
-        exportgraphics(fig, fullfile(figDir, [base '.png']), 'Resolution', 300);
+        savePng(fig, fullfile(figDir, [base '.png']), 300);
         if ~o.Show, close(fig); end
 
         if o.Silhouette
             fig = makeSilhouette(files, TK, SG, sprintf('%s  —  %s', D.label, rec.label), o);
-            exportgraphics(fig, fullfile(figDir, [base '_colon.png']), 'Resolution', 200);
+            savePng(fig, fullfile(figDir, [base '_colon.png']), 200);
             if ~o.Show, close(fig); end
         end
 
@@ -288,14 +292,15 @@ end
 tT = TK.t;
 pos = SG.frac * o.ColonLength;
 
-% ---- common time window
-spans = [min(tF), max(tF); tT(1), tT(end)];
-if hasP, spans(end + 1, :) = [tP(1), tP(end)]; end
-tLo = max(spans(:, 1));
-tHi = min(spans(:, 2));
-if ~(tHi > tLo)
-    error('force, pressure and video track do not overlap in time (check the sync in force_viewer_v3)');
-end
+% ---- time window = overlap of video track, force and pressure (the shortest record decides each end).
+%      A record that does not overlap the others at all (e.g. the pressure of a retraction video, which
+%      covers the go phase only) is left out of the overlap and its panel says so.
+spans = {[tT(1), tT(end)], [min(tF), max(tF)]};
+if hasP, spans{3} = [tP(1), tP(end)]; end
+[tLo, tHi, used] = overlapWindow(spans);
+hasF = used(2);
+hasPw = hasP && used(3);
+inF = tF >= tLo & tF <= tHi;
 bands = segmentBands(tT, SG.lab, tLo, tHi);
 
 fig = figure('Color', 'w', 'Units', 'centimeters', 'Position', [2 2 18 17], 'Visible', onOff(o.Show));
@@ -305,10 +310,16 @@ ax = gobjects(1, 3);
 ax(1) = nexttile(tl);
 plot(ax(1), tF, Fm, '-', 'Color', [0.58 0.40 0.74], 'LineWidth', 1.1);
 ylabel(ax(1), '|F| (N)');
-setYRange(ax(1), Fm(tF >= tLo & tF <= tHi), 0.22);
+if hasF
+    setYRange(ax(1), Fm(inF), 0.22);
+else
+    ylim(ax(1), [0 1]);
+    text(ax(1), 0.5, 0.5, 'force record does not overlap this video', 'Units', 'normalized', ...
+        'HorizontalAlignment', 'center', 'Color', [0.5 0.5 0.5]);
+end
 
 ax(2) = nexttile(tl);
-if hasP
+if hasPw
     plot(ax(2), tP, P1, '-', 'Color', [0.49 0.18 0.56], 'LineWidth', 1.1, 'DisplayName', 'P1');
     yy = P1(tP >= tLo & tP <= tHi);
     if o.ShowP1des
@@ -319,7 +330,9 @@ if hasP
     end
     setYRange(ax(2), yy, 0.08);
 else
-    text(ax(2), 0.5, 0.5, 'no pressure record', 'Units', 'normalized', ...
+    ylim(ax(2), [0 1]);
+    if hasP, msg = 'pressure record does not overlap this video'; else, msg = 'no pressure record'; end
+    text(ax(2), 0.5, 0.5, msg, 'Units', 'normalized', ...
         'HorizontalAlignment', 'center', 'Color', [0.5 0.5 0.5]);
 end
 ylabel(ax(2), o.PressureLabel);
@@ -373,6 +386,22 @@ for b = 1:numel(bands)
     s.Pmean = nan;
     if hasP, s.Pmean = mean(P1(tP >= t1 & tP < t2), 'omitnan'); end
     st(end + 1) = s; %#ok<AGROW>
+end
+end
+
+function [lo, hi, used] = overlapWindow(spans)
+%OVERLAPWINDOW Intersection of time spans {[t0 t1], ...}, starting from the first (the video track).
+%   A span that does not overlap the current window is skipped (used = false) instead of emptying it.
+lo = spans{1}(1); hi = spans{1}(2);
+used = true(1, 3);
+used(numel(spans) + 1:end) = false;
+for k = 2:numel(spans)
+    a = max(lo, spans{k}(1)); b = min(hi, spans{k}(2));
+    if b > a
+        lo = a; hi = b;
+    else
+        used(k) = false;
+    end
 end
 end
 
@@ -922,6 +951,24 @@ elseif strcmpi(sel, 'pick')
 elseif ~strcmpi(sel, 'all')
     REC = REC(contains({REC.label}, sel, 'IgnoreCase', true));
     if isempty(REC), warning('image_output:noMatch', 'No recording label contains "%s".', sel); end
+end
+end
+
+function savePng(fig, file, res)
+%SAVEPNG exportgraphics to a temp file, then move it in place. If the target is locked (open in an
+%   image viewer), the figure goes to '<name>_new.png' instead of being lost.
+tmp = [tempname '.png'];
+exportgraphics(fig, tmp, 'Resolution', res);
+[ok, msg] = movefile(tmp, file, 'f');
+if ~ok
+    [p, n] = fileparts(file);
+    alt = fullfile(p, [n '_new.png']);
+    [ok2, msg2] = movefile(tmp, alt, 'f');
+    if ok2
+        fprintf(2, '   %s is locked (open in another program?): saved as %s\n', [n '.png'], [n '_new.png']);
+    else
+        error('cannot write %s (%s; %s)', file, msg, msg2);
+    end
 end
 end
 
