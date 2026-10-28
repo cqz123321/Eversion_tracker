@@ -1,0 +1,25 @@
+﻿Trial,MaxPosition,MaxF_Sigmoid_N,MaxF_N,MaxP1_Sigmoid,MaxP1,TimeToMaxPosition_s,MaxRetractionF_N,RetractionTime_s,Notes,Folder
+S1,0.39 m (Sigmoid),0.685,0.685,90.29,90.29,49.5,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 1
+S3,0.41 m (Descending colon),0.229,0.258,87.03,90.32,250,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 3
+S4,0.44 m (Descending colon),0.836,0.937,87.03,98.18,37.8,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 4
+S6,0.41 m (Descending colon),0.484,0.484,95.7,95.7,155.3,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 6
+S7,0.40 m (Sigmoid),0.954,0.954,90.54,90.54,22.3,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 7
+S8,0.39 m (Sigmoid),0.75,0.75,90.03,90.03,66.3,Negligible,<15,Retraction force negligible; retraction time <15 s.,small size / test 8
+M2,1.17 m (Ascending colon),1.08,2.738,34.6,45.39,132.9,0.512,40,,Medim size / test 2
+M5,0.95 m (Hepatic flexure),1.682,2.054,36.17,50.6,107.4,0.545,50,,Medim size / test 5
+M6,1.23 m (Cecum),0.795,0.795,34.63,47,104,0.358,20.2,,Medim size / test 6
+M7,1.20 m (Cecum),1.997,2.633,40.59,50.6,118,0.526,28.9,,Medim size / test 7
+M8,1.20 m (Cecum),0.869,0.935,30.12,53.02,178.2,0.451,35,,Medim size / test 8
+M9,1.23 m (Cecum),0.412,0.412,25.55,48.61,98,0.504,40,,Medim size / test 9
+L1,0.87 m (Transverse colon),2.249,2.249,20.17,20.62,129.9,0.422,33,,large size / test 1
+L2,0.94 m (Hepatic flexure),2.803,3.533,23.16,33.11,65.6,0.311,70,,large size / test 2
+L5,0.61 m (Descending colon),0.979,1.89,16.82,30.47,60.8,,,Retraction values not reported in revised table.,large size / test 5
+L6,1.20 m (Cecum),2.952,3.212,28.99,30.63,187.1,0.581,75,,large size / test 6
+L7,1.21 m (Cecum),2.736,2.803,20.55,32.21,31.8,0.352,100,,large size / test 7
+L8,1.24 m (Cecum),4.471,5.488,25.13,30.6,46.1,0.930,61,,large size / test 8
+Mo3,1.17 m (Ascending colon)*,1.113,1.113,,,139.1,0.680,86,* Full length of the endoscope.,Mo / test 3
+Mo4,1.18 m (Ascending colon)*,0.847,1.484,,,93.9,0.714,81,* Full length of the endoscope.,Mo / test 4
+Mo5,1.18 m (Ascending colon)*,0.867,1.505,,,107.6,0.708,103,* Full length of the endoscope.,Mo / test 5
+Mo6,1.17 m (Ascending colon)*,0.959,2.332,,,92.8,0.734,80,* Full length of the endoscope.,Mo / test 6
+Mo7,1.15 m (Ascending colon)*,0.524,1.598,,,113.6,0.515,48,* Full length of the endoscope.,Mo / test 7
+Mo8,1.16 m (Ascending colon)*,0.462,2.062,,,139,0.354,62,* Full length of the endoscope.,Mo / test 8

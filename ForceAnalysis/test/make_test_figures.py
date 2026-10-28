@@ -1,6 +1,7 @@
 """Summary figures across trials, from the outputs of image_output.m / trial_table.m.
 
-Inputs (same folder as this script): trial_table.csv, segment_summary.csv, colon_cuts.json
+Inputs (same folder as this script): TABLE (trial_table_revised.csv), segment_summary.csv, colon_cuts.json
+segment_summary.csv is filtered to the trials listed in TABLE.
 Outputs: fig1_reach.png ... fig5_go_vs_retraction.png (300 dpi)
 
     python make_test_figures.py
@@ -16,13 +17,15 @@ import numpy as np
 import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+TABLE = "trial_table_revised.csv"
 L_COLON = 1.35
 GROUPS = ["S", "M", "L", "Mo"]
-GROUP_NAME = {"S": "Small", "M": "Medium", "L": "Large", "Mo": "Mo"}
+GROUP_NAME = {"S": "Small", "M": "Medium", "L": "Large", "Mo": "Endoscope"}
 GCOL = {"S": "#2a78d6", "M": "#eb6834", "L": "#1baf7a", "Mo": "#eda100"}
 SEGS = ["Rectum", "Sigmoid", "Descending colon", "Splenic flexure", "Transverse colon",
         "Hepatic flexure", "Ascending colon", "Cecum"]
 SEG_SHORT = ["Rect", "Sig", "Desc", "SF", "Trans", "HF", "Asc", "Cec"]
+SEG_COL = ["#a6a6a6", "#e07b39", "#c9a227", "#8c8c8c", "#3f9c4a", "#555555", "#2a78d6", "#8e5bd0"]
 SEG_BG = ["#ededed", "#fde3cf", "#fbf1c6", "#dcdcdc", "#dff0d9", "#dcdcdc", "#d9e8fb", "#ebe1f7"]
 INK, INK2, GRID = "#1f1f1f", "#5c5c5c", "#e6e6e6"
 
@@ -45,7 +48,10 @@ def trial_name(label):
 
 
 def load():
-    t = pd.read_csv(os.path.join(HERE, "trial_table.csv"))
+    t = pd.read_csv(os.path.join(HERE, TABLE), encoding="utf-8-sig")
+    t["retr_negligible"] = t.MaxRetractionF_N.astype(str).str.lower().eq("negligible")
+    for c in ["MaxF_Sigmoid_N", "MaxF_N", "MaxP1_Sigmoid", "MaxP1", "MaxRetractionF_N"]:
+        t[c] = pd.to_numeric(t[c], errors="coerce")     # "Negligible" -> NaN
     t["grp"] = t.Trial.str.extract(r"^(Mo|S|M|L)")[0]
     t["num"] = t.Trial.str.extract(r"(\d+)$")[0].astype(float)
     t["pos"] = t.MaxPosition.str.extract(r"([\d.]+) m")[0].astype(float)
@@ -55,6 +61,7 @@ def load():
     s["Trial"] = nm.str[0]
     s["grp"] = nm.str[1]
     s["num"] = nm.str[2]
+    s = s[s.Trial.isin(t.Trial)]
     with open(os.path.join(HERE, "colon_cuts.json"), encoding="utf-8") as f:
         cuts = json.load(f)
     edges = np.r_[0, cuts["frac_anatomical"], 1] * L_COLON
@@ -117,14 +124,13 @@ def fig_pressure_force(t):
     for g in ["S", "M", "L"]:
         d = t[(t.grp == g) & t.MaxP1.notna() & t.MaxF_N.notna()]
         dots(ax, d.MaxP1, d.MaxF_N, g)
-        lab = {"S": (99, 1.35, "right"), "M": (55, 2.95, "left"), "L": (36, 5.6, "left")}[g]
-        ax.text(lab[0], lab[1], f"{GROUP_NAME[g]}\nmedian F/P = {np.median(d.MaxF_N / d.MaxP1):.3f} N per unit P",
+        lab = {"S": (88, 0.2, "right"), "M": (55, 2.95, "left"), "L": (36, 5.6, "left")}[g]
+        ax.text(lab[0], lab[1], f"{GROUP_NAME[g]}\nmedian F/P = {np.median(d.MaxF_N / d.MaxP1):.3f} N/kPa",
                 ha=lab[2], va="bottom", fontsize=8, color=INK)
-    ax.set_xlabel("Max P1 (go)")
-    ax.set_ylabel("Max |F| (N, go)")
+    ax.set_xlabel("Max Pressure (kPa)")
+    ax.set_ylabel("Max |F| (N)")
     ax.set_ylim(0, t.MaxF_N.max() * 1.18)
-    ax.set_title("Smaller robots: higher pressure, lower force  (Mo: no pressure record)",
-                 loc="left", fontsize=10)
+    ax.set_title("Smaller robots: higher pressure, lower force", loc="left", fontsize=10)
     fig.savefig(os.path.join(HERE, "fig2_pressure_vs_force.png"))
     plt.close(fig)
 
@@ -138,7 +144,6 @@ def fig_peak_location(t):
     for g in GROUPS:
         dg = d[d.grp == g]
         for _, r in dg.iterrows():
-            ax.plot([x, x], [r.MaxF_Sigmoid_N, r.MaxF_N], color=GCOL[g], lw=1.6, zorder=2)
             ax.scatter(x, r.MaxF_N, s=34, color=GCOL[g], edgecolor="white", lw=0.8, zorder=3)
             ax.scatter(x, r.MaxF_Sigmoid_N, s=34, facecolor="white", edgecolor=GCOL[g], lw=1.4, zorder=3)
             labels.append(r.Trial)
@@ -210,6 +215,7 @@ def fig_segment_heatmap(s):
 # ---------------------------------------------------------------- 5. go vs retraction
 def fig_go_vs_retraction(t):
     d = t[t.MaxF_N.notna() & t.MaxRetractionF_N.notna()]
+    negl = t[t.retr_negligible]
     fig, ax = plt.subplots(figsize=(5.6, 3.8))
     for i, g in enumerate(GROUPS):
         dg = d[d.grp == g]
@@ -223,6 +229,10 @@ def fig_go_vs_retraction(t):
                             va="center", fontsize=8, color=INK)
         ax.text(3 * i + 0.5, -0.12, f"{GROUP_NAME[g]} (n = {len(dg)})", ha="center", va="top",
                 transform=ax.get_xaxis_transform(), fontsize=8.5, color=INK)
+        k = int((negl.grp == g).sum())
+        if k:
+            ax.text(3 * i + 0.5, 0.04, f"retraction\nnegligible\n({k} trials)", ha="center", va="bottom",
+                    transform=ax.get_xaxis_transform(), fontsize=7.5, color=INK2)
     ax.set_xticks([v for i in range(4) for v in (3 * i, 3 * i + 1)])
     ax.set_xticklabels(["go", "retr."] * 4, fontsize=8)
     ax.grid(axis="x", visible=False)
@@ -233,6 +243,50 @@ def fig_go_vs_retraction(t):
     plt.close(fig)
 
 
+# ---------------------------------------------------------------- 6. peak location, coloured by segment
+def fig_peak_segment(t, s):
+    g = s[s.role == "G"]
+    peak_seg = g.loc[g.groupby("Trial").F_max_N.idxmax()].set_index("Trial").segment
+    d = t[t.MaxF_Sigmoid_N.notna()].copy()
+    d["peak_seg"] = d.Trial.map(peak_seg)
+    d = d.sort_values(["grp", "num"], key=lambda c: c.map(
+        {g: i for i, g in enumerate(GROUPS)}) if c.name == "grp" else c)
+    d = d[d.peak_seg.isin(SEGS)]
+    d["yi"] = d.peak_seg.map(SEGS.index)
+    fig, ax = plt.subplots(figsize=(7.2, 4.2))
+    for k in range(8):
+        ax.axhspan(k - 0.5, k + 0.5, color=SEG_BG[k], zorder=0, lw=0)
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
+        "blue", ["#cfe2fa", "#9ec5f4", "#3987e5", "#1c5cab", "#0d366b"])
+    norm = matplotlib.colors.Normalize(0, d.MaxF_N.max())
+    x, xs, labels, xg = 0, [], [], []
+    for g in GROUPS:
+        dg = d[d.grp == g]
+        xs += list(x + np.arange(len(dg)))
+        labels += dg.Trial.tolist()
+        xg.append((x, x + len(dg) - 1, g))
+        x += len(dg) + 0.8
+    sc = ax.scatter(xs, d.yi, c=d.MaxF_N, cmap=cmap, norm=norm, s=110, edgecolor="white", lw=1, zorder=3)
+    for xi, (_, r) in zip(xs, d.iterrows()):
+        ax.text(xi, r.yi + 0.32, f"{r.MaxF_N:.1f}", ha="center", va="bottom", fontsize=6.5, color=INK)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(labels, fontsize=7, rotation=90)
+    for a, b, g in xg:
+        ax.text((a + b) / 2, 7.65, GROUP_NAME[g], ha="center", va="bottom", fontsize=8.5, color=INK)
+    ax.set_xlim(-0.8, x - 0.6)
+    ax.set_ylim(-0.5, 7.5)
+    ax.set_yticks(range(8))
+    ax.set_yticklabels(SEGS, fontsize=7.5)
+    ax.tick_params(axis="y", length=0)
+    ax.grid(False)
+    cb = fig.colorbar(sc, ax=ax, fraction=0.035, pad=0.02)
+    cb.set_label("peak |F| (N)")
+    cb.outline.set_visible(False)
+    ax.set_title("Where each trial's peak force happens (go phase)", loc="left", fontsize=10, pad=22)
+    fig.savefig(os.path.join(HERE, "fig6_peak_segment.png"))
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     T, S, E = load()
     fig_reach(T, E)
@@ -240,4 +294,5 @@ if __name__ == "__main__":
     fig_peak_location(T)
     fig_segment_heatmap(S)
     fig_go_vs_retraction(T)
+    fig_peak_segment(T, S)
     print("figures written to", HERE)
