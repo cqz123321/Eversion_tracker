@@ -1,0 +1,25 @@
+Trial,PosAtMaxF_m,SegAtMaxF,SegFracAtMaxF
+S1,0.393,Sigmoid,0.92
+S3,0.396,Descending colon,0.011
+S4,0.438,Descending colon,0.202
+S6,0.384,Sigmoid,0.877
+S7,0.395,Sigmoid,0.901
+S8,0.182,Sigmoid,0.201
+M2,0.421,Descending colon,0.017
+M5,0.44,Descending colon,0.096
+M6,0.258,Sigmoid,0.546
+M7,0.412,Descending colon,0.101
+M8,0.494,Descending colon,0.566
+M9,0.229,Sigmoid,0.437
+L1,0.285,Sigmoid,0.559
+L2,0.427,Descending colon,0.07
+L5,0.435,Descending colon,0.096
+L6,0.754,Transverse colon,0.279
+L7,0.415,Descending colon,0.031
+L8,0.561,Descending colon,0.692
+Mo3,0.225,Sigmoid,0.481
+Mo4,1.174,Ascending colon,0.711
+Mo5,1.017,Hepatic flexure,0.985
+Mo6,1.03,Ascending colon,0.005
+Mo7,0.837,Transverse colon,0.714
+Mo8,0.809,Transverse colon,0.556

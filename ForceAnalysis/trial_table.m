@@ -19,6 +19,9 @@ function T = trial_table(varargin)
 %                           limited to the R video when there is one
 %     RetractionTime_s      R video: from the start of the retraction (tip > MoveThresh back from its
 %                           start position) to the first time within ReachTol of its final (minimum) position
+%     PosAtMaxF_m           tip position (furthest so far) when MaxF_N happens  (go)
+%     SegAtMaxF             its segment
+%     SegFracAtMaxF         how far into that segment, 0 = start, 1 = end
 %     Notes                 anything that makes a value missing or less reliable
 %
 %   Go force / pressure values use the same time window as the go figure of
@@ -60,7 +63,7 @@ names = segNames();
 
 REC = buildRecordings(rootDir, videoDir, corrDir);
 folders = unique({REC.folder}, 'stable');
-rows = cell(0, 11);
+rows = cell(0, 14);
 key = cell(0, 1);
 for fi = 1:numel(folders)
     folder = folders{fi};
@@ -120,6 +123,18 @@ for fi = 1:numel(folders)
         Fmax = maxIn(tF, Fm, tLo, tHi);
         Pmax = nan;
         if hasP, Pmax = maxIn(tP, P1, tLo, tHi); end
+        % tip position when the go peak force happens (furthest point so far, as for the segment bands)
+        posPk = nan; segPk = ''; fPk = nan;
+        if ~isempty(gRec) && SG.has && isfinite(Fmax)
+            in = find(tF >= tLo & tF <= tHi);
+            [~, im] = max(Fm(in));
+            [~, j] = min(abs(TK.t - tF(in(im))));
+            posPk = max(ps(1:j));
+            u = posPk / o.ColonLength;
+            k = segOf(u, SG.edges);
+            segPk = names{k};
+            fPk = (u - SG.edges(k)) / max(SG.edges(k + 1) - SG.edges(k), eps);
+        end
         if ~isempty(gRec) && SG.has
             bands = segmentBands(TK.t, SG.lab, tLo, tHi);
             sig = bands([bands.k] == 2);
@@ -165,7 +180,8 @@ for fi = 1:numel(folders)
         end
 
         rows(end + 1, :) = {trial, maxPos, round(FsigMax, 3), round(Fmax, 3), round(PsigMax, 2), ...
-            round(Pmax, 2), round(tReach, 1), round(FRmax, 3), round(tRet, 1), strjoin(notes, '; '), D.label}; %#ok<AGROW>
+            round(Pmax, 2), round(tReach, 1), round(FRmax, 3), round(tRet, 1), ...
+            round(posPk, 3), segPk, round(fPk, 3), strjoin(notes, '; '), D.label}; %#ok<AGROW>
     catch err
         where = '';
         if ~isempty(err.stack), where = sprintf(' (%s, line %d)', err.stack(1).name, err.stack(1).line); end
@@ -175,7 +191,8 @@ for fi = 1:numel(folders)
 end
 
 T = cell2table(rows, 'VariableNames', {'Trial', 'MaxPosition', 'MaxF_Sigmoid_N', 'MaxF_N', ...
-    'MaxP1_Sigmoid', 'MaxP1', 'TimeToMaxPosition_s', 'MaxRetractionF_N', 'RetractionTime_s', 'Notes', 'Folder'});
+    'MaxP1_Sigmoid', 'MaxP1', 'TimeToMaxPosition_s', 'MaxRetractionF_N', 'RetractionTime_s', ...
+    'PosAtMaxF_m', 'SegAtMaxF', 'SegFracAtMaxF', 'Notes', 'Folder'});
 [~, o2] = sort(key);
 T = T(o2, :);
 writetable(T, fullfile(outDir, 'trial_table.csv'));
