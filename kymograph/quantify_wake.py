@@ -20,12 +20,14 @@ Figures
 MATCH = ""              # only videos whose name contains this text ("" = all)
 TRIAL_TABLE = "../ForceAnalysis/test/trial_table_revised.csv"   # only trials listed here (6 per group); "" = all
 RUNS = ("G",)           # run types to include (last letter of the name); R runs: the active side is T, not H
-GROUPS = ("L", "M", "S", "Mo")   # order in the figures; Mo = human operator
 GAP = 5                 # stations (= % path) on each side of the tip left out, so the tip's own motion is not counted
 MIN_DEPTH = 10          # frames count only once the tip is this far in (so a passed region exists)
 ACTIVE_LEVEL = 1.0      # signal level counted as "moving" for wake_active (fixed, the same for every video)
 PROFILE_RANGE = (-80, 30)   # distance from the tip (% path) shown in wake_profile.png; negative = behind (H side)
-COLORS = {"L": "#1f77b4", "M": "#2ca02c", "S": "#9467bd", "Mo": "#d62728"}
+PATH_LENGTH_M = 1.35    # length of the whole centerline (stations 0..n-1) in m, = L_COLON in ForceAnalysis/test
+GROUPS = ("S", "M", "L", "Mo")   # figure order
+NAMES = {"S": "Small vine (7 mm)", "M": "Medium vine (15 mm)", "L": "Large vine (22 mm)", "Mo": "Endoscope"}
+COLORS = {"S": "#1baf7a", "M": "#d6372b", "L": "#2a5fd6", "Mo": "#8a4fd0"}   # as make_test_figures2.py
 # ------------------------------------------------------------------
 import glob
 import os
@@ -71,6 +73,7 @@ def metrics(tip, sig):
     cnt = np.isfinite(vals).sum(0)
     prof = np.where(cnt > 0, np.nansum(vals, 0) / np.maximum(cnt, 1), np.nan)
     d["profile"] = prof
+    d["profile_n"] = st
     return d
 
 
@@ -147,7 +150,7 @@ def plot_metrics(rows, path):
         ax.boxplot(data, widths=0.55, showfliers=False, medianprops=dict(color="k"))
         for i, (g, v) in enumerate(zip(groups, data)):
             ax.scatter(i + 1 + rng.uniform(-0.12, 0.12, len(v)), v, s=22, color=COLORS.get(g, "k"), zorder=3)
-        ax.set_xticks(range(1, len(groups) + 1), groups)
+        ax.set_xticks(range(1, len(groups) + 1), [NAMES[g] for g in groups], rotation=20)
         ax.set_ylabel(lab)
         ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
@@ -158,17 +161,19 @@ def plot_metrics(rows, path):
 def plot_profile(rows, path):
     import matplotlib.pyplot as plt
     rel = np.arange(PROFILE_RANGE[0], PROFILE_RANGE[1] + 1)
+    n = len(rows[0]["profile_n"]) if rows else 100
+    x = rel * PATH_LENGTH_M / n                 # stations -> m
     fig, ax = plt.subplots(figsize=(6, 3.6))
     for g in GROUPS:
         P = np.array([r["profile"] for r in rows if r["group"] == g])
         if not len(P):
             continue
         m, s = np.nanmean(P, 0), np.nanstd(P, 0)
-        ax.plot(rel, m, color=COLORS.get(g, "k"), lw=2, label=f"{g} (n={len(P)})")
-        ax.fill_between(rel, m - s, m + s, color=COLORS.get(g, "k"), alpha=0.18, lw=0)
+        ax.plot(x, m, color=COLORS.get(g, "k"), lw=2, label=NAMES[g])
+        ax.fill_between(x, m - s, m + s, color=COLORS.get(g, "k"), alpha=0.18, lw=0)
     ax.axvline(0, color="0.4", lw=1, ls="--")
-    ax.set_xlabel("Distance from tip (% path)   behind (H) ←  → ahead (T)")
-    ax.set_ylabel("Mean signal")
+    ax.set_xlabel("Distance from tip (m)")
+    ax.set_ylabel("Time-averaged\ncolour-change signal")
     ax.legend(frameon=False)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()

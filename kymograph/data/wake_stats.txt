@@ -1,15 +1,15 @@
-wake_mean:  L 0.107 [0.103-0.118] (n=6)   M 0.113 [0.107-0.122] (n=6)   S 0.106 [0.0952-0.11] (n=6)   Mo 0.489 [0.434-0.564] (n=6)
+wake_mean:  S 0.106 [0.0952-0.11] (n=6)   M 0.113 [0.107-0.122] (n=6)   L 0.107 [0.103-0.118] (n=6)   Mo 0.489 [0.434-0.564] (n=6)
   Kruskal-Wallis H = 13.71, p = 0.0033
-  L vs Mo: p_holm = 0.0065, Mo/L median = 4.58x, Cliff's delta = +1.00
-  M vs Mo: p_holm = 0.0065, Mo/M median = 4.34x, Cliff's delta = +1.00
   S vs Mo: p_holm = 0.0065, Mo/S median = 4.62x, Cliff's delta = +1.00
-wake_active:  L 0.00494 [0.00275-0.00828] (n=6)   M 0.00466 [0.0041-0.00621] (n=6)   S 0.00147 [0.000657-0.00207] (n=6)   Mo 0.137 [0.122-0.157] (n=6)
+  M vs Mo: p_holm = 0.0065, Mo/M median = 4.34x, Cliff's delta = +1.00
+  L vs Mo: p_holm = 0.0065, Mo/L median = 4.58x, Cliff's delta = +1.00
+wake_active:  S 0.00147 [0.000657-0.00207] (n=6)   M 0.00466 [0.0041-0.00621] (n=6)   L 0.00494 [0.00275-0.00828] (n=6)   Mo 0.137 [0.122-0.157] (n=6)
   Kruskal-Wallis H = 18.49, p = 0.00035
-  L vs Mo: p_holm = 0.0065, Mo/L median = 27.80x, Cliff's delta = +1.00
-  M vs Mo: p_holm = 0.0065, Mo/M median = 29.50x, Cliff's delta = +1.00
   S vs Mo: p_holm = 0.0065, Mo/S median = 93.32x, Cliff's delta = +1.00
-wake_ratio:  L 1.8 [1.58-1.91] (n=6)   M 1.9 [1.79-1.96] (n=6)   S 1.49 [1.43-1.85] (n=6)   Mo 10.2 [7.86-11.8] (n=6)
+  M vs Mo: p_holm = 0.0065, Mo/M median = 29.50x, Cliff's delta = +1.00
+  L vs Mo: p_holm = 0.0065, Mo/L median = 27.80x, Cliff's delta = +1.00
+wake_ratio:  S 1.49 [1.43-1.85] (n=6)   M 1.9 [1.79-1.96] (n=6)   L 1.8 [1.58-1.91] (n=6)   Mo 10.2 [7.86-11.8] (n=6)
   Kruskal-Wallis H = 14.00, p = 0.0029
-  L vs Mo: p_holm = 0.0065, Mo/L median = 5.67x, Cliff's delta = +1.00
-  M vs Mo: p_holm = 0.0065, Mo/M median = 5.38x, Cliff's delta = +1.00
   S vs Mo: p_holm = 0.0065, Mo/S median = 6.89x, Cliff's delta = +1.00
+  M vs Mo: p_holm = 0.0065, Mo/M median = 5.38x, Cliff's delta = +1.00
+  L vs Mo: p_holm = 0.0065, Mo/L median = 5.67x, Cliff's delta = +1.00
