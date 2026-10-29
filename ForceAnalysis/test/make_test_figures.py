@@ -18,7 +18,7 @@ import pandas as pd
 
 # ---------------------------------------------------------------- settings to tweak
 FONT = "Calibri"     # font for every figure
-FS = 14              # font size for all text; titles use FS + 1
+FS = 16              # font size for all text; titles use FS + 1
 TABLE = "trial_table_revised.csv"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
