@@ -17,7 +17,7 @@ function S = image_output(varargin)
 here = fileparts(mfilename('fullpath'));
 S0 = struct();
 % ---- what to export
-S0.Recordings     = 'Mo 01';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
+S0.Recordings     = 'all';      % 'all' | 'pick' (list dialog) | text in the label, e.g. 'L 01' | indices
 S0.Silhouette     = true;       % also export <recording>_colon.png (slower; false = only the curve figures)
 S0.Reference      = true;       % also export colon_reference.png: the reference video's colon with the segments (for the paper)
 S0.Show           = false;      % keep the figures open on screen
