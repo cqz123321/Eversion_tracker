@@ -1,4 +1,4 @@
-"""Quantify how much the already-passed lumen keeps moving after the tip has gone by ("wake disturbance").
+﻿"""Quantify how much the already-passed lumen keeps moving after the tip has gone by ("wake disturbance").
 
 Just run this file. Reads the CSVs written by export_kymographs.py, no video decoding.
 Needs numpy + matplotlib (+ scipy for the statistics).
@@ -18,12 +18,13 @@ Figures
 """
 # ------------------------------------------------------------------ settings
 MATCH = ""              # only videos whose name contains this text ("" = all)
+TRIAL_TABLE = "../ForceAnalysis/test/trial_table_revised.csv"   # only trials listed here (6 per group); "" = all
 RUNS = ("G",)           # run types to include (last letter of the name); R runs: the active side is T, not H
 GROUPS = ("L", "M", "S", "Mo")   # order in the figures; Mo = human operator
 GAP = 5                 # stations (= % path) on each side of the tip left out, so the tip's own motion is not counted
 MIN_DEPTH = 10          # frames count only once the tip is this far in (so a passed region exists)
 ACTIVE_LEVEL = 1.0      # signal level counted as "moving" for wake_active (fixed, the same for every video)
-PROFILE_RANGE = (-60, 30)   # distance from the tip (% path) shown in wake_profile.png; negative = behind (H side)
+PROFILE_RANGE = (-80, 30)   # distance from the tip (% path) shown in wake_profile.png; negative = behind (H side)
 COLORS = {"L": "#1f77b4", "M": "#2ca02c", "S": "#9467bd", "Mo": "#d62728"}
 # ------------------------------------------------------------------
 import glob
@@ -73,12 +74,24 @@ def metrics(tip, sig):
     return d
 
 
+def selected_trials(path=TRIAL_TABLE):
+    """{(group, trial number)} from the Trial column of the trial table (e.g. "Mo3"), or None = keep all."""
+    if not path:
+        return None
+    with open(os.path.join(HERE, path), encoding="utf-8-sig") as f:
+        names = [line.split(",", 1)[0].strip() for line in f.readlines()[1:] if line.strip()]
+    return {(m.group(1), int(m.group(2))) for m in map(re.compile(r"^(Mo|L|M|S)(\d+)$").match, names) if m}
+
+
 def collect(match=MATCH):
+    keep = selected_trials()
     rows = []
     for p in sorted(glob.glob(os.path.join(DATA, "*_kymograph.csv"))):
         name = os.path.basename(p)[:-len("_kymograph.csv")]
         m = NAME_RE.search(name)
         if not m or match.lower() not in name.lower() or m.group(3) not in RUNS:
+            continue
+        if keep is not None and (m.group(1), int(m.group(2))) not in keep:
             continue
         d = metrics(*read_kymo(p))
         d.update(video=name, group=m.group(1), trial=int(m.group(2)), run=m.group(3))
@@ -170,11 +183,13 @@ def main():
         print(f"  {r['video']:22s} wake {r['wake_mean']:.3f}  active {r['wake_active']:.3f}  "
               f"ratio {r['wake_ratio']:.2f}", flush=True)
     write_csv(rows, os.path.join(DATA, "wake_metrics.csv"))
-    for k in ("wake_mean", "wake_active", "wake_ratio"):
-        print("\n".join(stats(rows, k)), flush=True)
+    lines = [ln for k in ("wake_mean", "wake_active", "wake_ratio") for ln in stats(rows, k)]
+    print("\n".join(lines), flush=True)
+    with open(os.path.join(DATA, "wake_stats.txt"), "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
     plot_metrics(rows, os.path.join(HERE, "wake_metrics.png"))
     plot_profile(rows, os.path.join(HERE, "wake_profile.png"))
-    print("wrote data/wake_metrics.csv, wake_metrics.png, wake_profile.png", flush=True)
+    print("wrote data/wake_metrics.csv, data/wake_stats.txt, wake_metrics.png, wake_profile.png", flush=True)
 
 
 if __name__ == "__main__":
