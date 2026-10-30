@@ -28,6 +28,24 @@ PATH_LENGTH_M = 1.35    # length of the whole centerline (stations 0..n-1) in m,
 GROUPS = ("S", "M", "L", "Mo")   # figure order
 NAMES = {"S": "Small vine (7 mm)", "M": "Medium vine (15 mm)", "L": "Large vine (22 mm)", "Mo": "Endoscope"}
 COLORS = {"S": "#1baf7a", "M": "#d6372b", "L": "#2a5fd6", "Mo": "#8a4fd0"}   # as make_test_figures2.py
+# ------------------------------------------------------------------ figure settings
+DPI = 300
+FONT_SIZE = 9           # base font size of all text
+# wake_profile.png
+PROFILE_SIZE_CM = (9, 6)       # (width, height) in cm; smaller height = flatter figure
+PROFILE_LW = 2                  # line width of the group means
+PROFILE_SD_ALPHA = 0.3         # opacity of the +/- SD bands (0 = invisible, 1 = solid)
+PROFILE_SD_COLORS = None        # SD band colour per group, e.g. {"Mo": "#bbbbbb"}; groups not listed / None = line colour
+PROFILE_XLABEL = "Distance from tip (m)"
+PROFILE_YLABEL = "Motion-induced colour-change signal"
+PROFILE_YLIM = None             # e.g. (0, 3); None = automatic
+PROFILE_LEGEND_LOC = "best"     # e.g. "upper left"; None = no legend
+# wake_metrics.png
+METRICS_PANEL_W_CM = 10         # width of each panel in cm
+METRICS_H_CM = 5              # figure height in cm
+METRICS_POINT_SIZE = 22
+METRICS_BOX_WIDTH = 0.55
+METRICS_XTICK_ROTATION = 20
 # ------------------------------------------------------------------
 import glob
 import os
@@ -37,6 +55,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
+CM = 2.54                                       # cm per inch (matplotlib figsize is in inches)
 NAME_RE = re.compile(r"\s(L|M|S|Mo)\s+(\d+)\s+([GR])$")
 
 
@@ -143,18 +162,20 @@ def plot_metrics(rows, path):
             ("wake_active", f"Active fraction behind tip\n(signal > {ACTIVE_LEVEL:g})"),
             ("wake_ratio", "Wake / ahead ratio")]
     groups = [g for g in GROUPS if any(r["group"] == g for r in rows)]
-    fig, axs = plt.subplots(1, len(keys), figsize=(4 * len(keys), 3.6))
+    plt.rcParams["font.size"] = FONT_SIZE
+    fig, axs = plt.subplots(1, len(keys), figsize=(METRICS_PANEL_W_CM * len(keys) / CM, METRICS_H_CM / CM))
     rng = np.random.default_rng(0)
     for ax, (k, lab) in zip(axs, keys):
         data = [[r[k] for r in rows if r["group"] == g and np.isfinite(r[k])] for g in groups]
-        ax.boxplot(data, widths=0.55, showfliers=False, medianprops=dict(color="k"))
+        ax.boxplot(data, widths=METRICS_BOX_WIDTH, showfliers=False, medianprops=dict(color="k"))
         for i, (g, v) in enumerate(zip(groups, data)):
-            ax.scatter(i + 1 + rng.uniform(-0.12, 0.12, len(v)), v, s=22, color=COLORS.get(g, "k"), zorder=3)
-        ax.set_xticks(range(1, len(groups) + 1), [NAMES[g] for g in groups], rotation=20)
+            ax.scatter(i + 1 + rng.uniform(-0.12, 0.12, len(v)), v, s=METRICS_POINT_SIZE,
+                       color=COLORS.get(g, "k"), zorder=3)
+        ax.set_xticks(range(1, len(groups) + 1), [NAMES[g] for g in groups], rotation=METRICS_XTICK_ROTATION)
         ax.set_ylabel(lab)
         ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
-    fig.savefig(path, dpi=300)
+    fig.savefig(path, dpi=DPI)
     plt.close(fig)
 
 
@@ -163,21 +184,26 @@ def plot_profile(rows, path):
     rel = np.arange(PROFILE_RANGE[0], PROFILE_RANGE[1] + 1)
     n = len(rows[0]["profile_n"]) if rows else 100
     x = rel * PATH_LENGTH_M / n                 # stations -> m
-    fig, ax = plt.subplots(figsize=(6, 3.6))
+    plt.rcParams["font.size"] = FONT_SIZE
+    fig, ax = plt.subplots(figsize=(PROFILE_SIZE_CM[0] / CM, PROFILE_SIZE_CM[1] / CM))
     for g in GROUPS:
         P = np.array([r["profile"] for r in rows if r["group"] == g])
         if not len(P):
             continue
         m, s = np.nanmean(P, 0), np.nanstd(P, 0)
-        ax.plot(x, m, color=COLORS.get(g, "k"), lw=2, label=NAMES[g])
-        ax.fill_between(x, m - s, m + s, color=COLORS.get(g, "k"), alpha=0.18, lw=0)
+        ax.plot(x, m, color=COLORS.get(g, "k"), lw=PROFILE_LW, label=NAMES[g])
+        sd_color = (PROFILE_SD_COLORS or {}).get(g, COLORS.get(g, "k"))
+        ax.fill_between(x, m - s, m + s, color=sd_color, alpha=PROFILE_SD_ALPHA, lw=0)
     ax.axvline(0, color="0.4", lw=1, ls="--")
-    ax.set_xlabel("Distance from tip (m)")
-    ax.set_ylabel("Time-averaged\ncolour-change signal")
-    ax.legend(frameon=False)
+    ax.set_xlabel(PROFILE_XLABEL)
+    ax.set_ylabel(PROFILE_YLABEL)
+    if PROFILE_YLIM is not None:
+        ax.set_ylim(*PROFILE_YLIM)
+    if PROFILE_LEGEND_LOC is not None:
+        ax.legend(frameon=False, loc=PROFILE_LEGEND_LOC)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
-    fig.savefig(path, dpi=300)
+    fig.savefig(path, dpi=DPI)
     plt.close(fig)
 
 
