@@ -8,16 +8,25 @@ is not used or changed. Needs numpy + matplotlib + pillow (tkinter comes with Py
 Figure: one panel per video, x = normalized elapsed time (0-100 %), y = path progression (S at the top,
 E at the bottom), white line = tip, one colour bar for all panels. If the selected videos have different
 thresholds, every panel is divided by its own threshold (colour bar in units of the threshold).
+The two blur sliders smooth the signal (Gaussian) before drawing, to calm a busy background.
 """
 # ------------------------------------------------------------------ defaults (all can be changed in the window)
 FONT = "Calibri"
-FONT_SIZE = 9          # pt; axis titles are 1.6x, as in the paper figure
-WIDTH_CM = 17.0        # figure width; A4 text width is about 16-18 cm
-PANEL_CM = 3.6         # height of one kymograph panel
+TICK_SIZE = 12         # pt, tick labels (S 25 50 75 E, 0..100, colour bar)
+LABEL_SIZE = 14        # pt, axis titles
+CBAR_SIZE = 9          # pt, colour bar title
+NAME_SIZE = 20         # pt, group name in the panels
+WIDTH_CM = 15.0        # figure width; A4 text width is about 16-18 cm
+PANEL_CM = 3.5         # height of one kymograph panel
+GAP_CM = 0.0           # space between the panels
+CBAR_CM = 0.3          # colour bar width
+CBAR_TITLE = ""
 VMAX_FACTOR = 2.0      # colour scale = 0 .. VMAX_FACTOR x threshold
 COLORMAP = "turbo"
-TIP_WIDTH = 1.6        # pt
-PANEL_LABELS = False   # group name (Small, Medium, ...) in the corner of each panel
+TIP_WIDTH = 1.0        # pt
+PANEL_LABELS = True    # group name (Small, Medium, ...) in the lower left corner of each panel
+BLUR_PATH = 0.5        # Gaussian sigma along the path, in % path (stations)
+BLUR_TIME = 0.2        # Gaussian sigma along time, in % of the run duration
 DEFAULT = ("M 09 G", "Mo 06 G")   # selected when the window opens (text contained in the video name)
 # ------------------------------------------------------------------
 import glob
@@ -73,24 +82,43 @@ def load(name):
     return _CACHE[name]
 
 
+def gauss(a, sigma, axis):
+    """Gaussian smoothing of a along axis (sigma in samples), edges extended."""
+    if sigma < 0.3:
+        return a
+    r = int(np.ceil(3 * sigma))
+    k = np.exp(-0.5 * (np.arange(-r, r + 1) / sigma) ** 2)
+    k /= k.sum()
+    pad = [(0, 0)] * a.ndim
+    pad[axis] = (r, r)
+    a = np.pad(a, pad, mode="edge")
+    return np.apply_along_axis(lambda x: np.convolve(x, k, mode="valid"), axis, a)
+
+
+def blurred(sig, s):
+    """Gaussian smoothing of sig (stations x frames): sigma in % path and % of the run duration."""
+    sig = gauss(sig, s["blur_y"] * (sig.shape[0] - 1) / 100, 0)
+    return gauss(sig, s["blur_t"] * sig.shape[1] / 100, 1)
+
+
 def make_figure(names, s):
     """New figure with the stacked kymographs of names, settings s (dict)."""
-    plt.rcParams.update({"font.family": s["font"], "font.size": s["font_size"], "pdf.fonttype": 42,
+    plt.rcParams.update({"font.family": s["font"], "font.size": s["tick_size"], "pdf.fonttype": 42,
                          "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6})
     n = len(names)
-    size = (s["width"] * CM, (n * s["panel"] + 2.2) * CM)
-    fig = plt.figure(figsize=size, layout="constrained")
-    fig.get_layout_engine().set(h_pad=0.02, w_pad=0.02, hspace=0.035)
+    h = n * s["panel"] + max(n - 1, 0) * s["gap"]                    # height of the panel stack, cm
+    fig = plt.figure(figsize=(s["width"] * CM, h * CM + 2.2 * s["label_size"] / 72), layout="constrained")
+    fig.get_layout_engine().set(h_pad=0.01, w_pad=0.02, hspace=s["gap"] / s["panel"], wspace=0)
     if not n:
         return fig
     data = [load(v) for v in names]
     thrs = {d[3] for d in data}
     same = len(thrs) == 1
     vmax = s["vmax"] * (data[0][3] if same else 1.0)
-    big = s["font_size"] * 1.6
 
     axs = fig.subplots(n, 1, sharex=True, squeeze=False)[:, 0]
     for ax, v, (t, tip, sig, thr) in zip(axs, names, data):
+        sig = blurred(sig, s)
         if not same:
             sig = sig / thr
         st = sig.shape[0]
@@ -105,24 +133,33 @@ def make_figure(names, s):
         ax.set_xlim(0, 100)
         ax.set_ylim(100, 0)
         ax.set_yticks([0, 25, 50, 75, 100], ["S", "25", "50", "75", "E"])
+        ticks = ax.yaxis.get_major_ticks()
+        ticks[0].label1.set_va("top")                               # S and E sit inside the panel, so the E of
+        ticks[-1].label1.set_va("bottom")                           # one panel never runs into the S of the next
         ax.tick_params(direction="out", length=3, pad=2)
         if s["labels"]:
             m = NAME_RE.search(v)
-            ax.text(0.99, 0.95, GROUP[m.group(1)] if m else v, transform=ax.transAxes, ha="right", va="top",
-                    color="w", fontweight="bold")
+            ax.text(0.01, 0.05, GROUP[m.group(1)] if m else v, transform=ax.transAxes, ha="left", va="bottom",
+                    color="w", fontweight="bold", fontsize=s["name_size"])
     axs[-1].set_xticks([0, 25, 50, 75, 100])
     for ax in axs[:-1]:
         ax.tick_params(labelbottom=False)
-    fig.supxlabel("Normalized Elapsed Time (%)", fontsize=big)
-    fig.supylabel("Path Progression (%)", fontsize=big)
+    fig.supxlabel("Normalized Elapsed Time (%)", fontsize=s["label_size"])
+    fig.supylabel("Path Progression (%)", fontsize=s["label_size"])
 
-    cb = fig.colorbar(im, ax=list(axs), fraction=0.025, pad=0.012, aspect=12 * n)
-    cb.set_ticks([0, vmax / 2, vmax])
-    cb.ax.tick_params(direction="out", length=3, pad=2, labelsize=s["font_size"])
+    cb = fig.colorbar(im, ax=list(axs), fraction=s["cbar_w"] / s["width"], pad=0.01, aspect=h / s["cbar_w"])
+    cb.set_ticks([0, vmax / 2, vmax], labels=[f"{x:g}" for x in (0, vmax / 2, vmax)])
+    cb.ax.tick_params(direction="out", length=3, pad=2, labelsize=s["tick_size"])
     cb.outline.set_linewidth(0.6)
-    cb.ax.set_title("color-change signal", fontsize=s["font_size"], pad=4)
-    cb.ax.text(0.5, -0.03, f"(thr = {data[0][3]:g})" if same else "", transform=cb.ax.transAxes,
-               ha="center", va="top", fontsize=s["font_size"])
+    title = s["cbar_title"].strip() + ("" if same else "")
+    if title.strip():
+        cb.ax.set_title(title.strip(), fontsize=s["cbar_size"], pad=4, linespacing=1.0)
+    if n > 1:                                                       # the layout pads around the tick marks: shift
+        fig.canvas.draw()                                           # the spacing so the gap is what was asked for
+        a, b = axs[0].get_position(), axs[1].get_position()
+        got = (a.y0 - b.y1) * fig.get_figheight() / CM
+        hs = fig.get_layout_engine().get()["hspace"]
+        fig.get_layout_engine().set(hspace=max(hs + (s["gap"] - got) / s["panel"], 0))
     return fig
 
 
@@ -155,17 +192,29 @@ class App:
         self.lb_sel.bind("<Double-Button-1>", lambda e: self.remove())
 
         self.vars = {}
-        opts = [("font", "Font", FONT), ("font_size", "Font size (pt)", FONT_SIZE), ("width", "Width (cm)", WIDTH_CM),
-                ("panel", "Panel height (cm)", PANEL_CM), ("vmax", "Colour max (x thr)", VMAX_FACTOR),
-                ("tip", "Tip line (pt, 0 = off)", TIP_WIDTH)]
+        opts = [("font", "Font", FONT), ("tick_size", "Tick labels (pt)", TICK_SIZE),
+                ("label_size", "Axis titles (pt)", LABEL_SIZE), ("cbar_size", "Colour bar title (pt)", CBAR_SIZE),
+                ("name_size", "Group names (pt)", NAME_SIZE), ("cbar_title", "Colour bar title", CBAR_TITLE),
+                ("width", "Width (cm)", WIDTH_CM), ("panel", "Panel height (cm)", PANEL_CM),
+                ("gap", "Gap between panels (cm)", GAP_CM), ("cbar_w", "Colour bar width (cm)", CBAR_CM),
+                ("vmax", "Colour max (x thr)", VMAX_FACTOR), ("tip", "Tip line (pt, 0 = off)", TIP_WIDTH)]
         r = 6
         for key, lab, val in opts:
             ttk.Label(left, text=lab).grid(row=r, column=0, columnspan=2, sticky="w", pady=1)
             var = tk.StringVar(value=str(val))
             var.trace_add("write", lambda *a: self.schedule())
-            ttk.Entry(left, textvariable=var, width=10).grid(row=r, column=2, sticky="e")
+            ttk.Entry(left, textvariable=var, width=14 if key == "cbar_title" else 10).grid(row=r, column=2,
+                                                                                         sticky="e")
             self.vars[key] = var
             r += 1
+        for key, lab, val, top in (("blur_y", "Blur along path (% path)", BLUR_PATH, 5),
+                                   ("blur_t", "Blur along time (% duration)", BLUR_TIME, 2)):
+            ttk.Label(left, text=lab).grid(row=r, column=0, columnspan=3, sticky="w", pady=(4, 0))
+            var = tk.DoubleVar(value=val)
+            tk.Scale(left, variable=var, from_=0, to=top, resolution=top / 50, orient="horizontal",
+                     command=lambda e: self.schedule()).grid(row=r + 1, column=0, columnspan=3, sticky="we")
+            self.vars[key] = var
+            r += 2
         ttk.Label(left, text="Colour map").grid(row=r, column=0, columnspan=2, sticky="w")
         self.vars["cmap"] = tk.StringVar(value=COLORMAP)
         cm = ttk.Combobox(left, textvariable=self.vars["cmap"], width=9, state="readonly",
@@ -224,8 +273,10 @@ class App:
 
     # ---- figure
     def settings(self):
-        s = {k: float(self.vars[k].get()) for k in ("font_size", "width", "panel", "vmax", "tip")}
+        s = {k: float(self.vars[k].get()) for k in ("tick_size", "label_size", "cbar_size", "name_size", "width",
+                                                    "panel", "gap", "cbar_w", "vmax", "tip", "blur_y", "blur_t")}
         s["font"] = self.vars["font"].get().strip() or FONT
+        s["cbar_title"] = self.vars["cbar_title"].get()
         s["cmap"] = self.vars["cmap"].get()
         s["labels"] = self.labels.get()
         return s
@@ -278,7 +329,7 @@ class App:
 
 def main():
     root = tk.Tk()
-    root.geometry("1400x800")
+    root.geometry("1400x950")
     App(root)
     root.mainloop()
 
